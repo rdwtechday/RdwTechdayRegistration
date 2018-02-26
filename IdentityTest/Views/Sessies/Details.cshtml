@@ -1,0 +1,42 @@
+﻿@model RdwTechdayRegistration.Models.Sessie
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Sessie</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Naam)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Naam)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Track.Naam)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Track.Naam)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Ruimte.Naam)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Ruimte.Naam)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Tijdvak)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Tijdvak.Start) - @Html.DisplayFor(model => model.Tijdvak.Einde)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

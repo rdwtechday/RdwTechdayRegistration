@@ -1,0 +1,60 @@
+﻿@model EnableAuthenticatorViewModel
+@{
+    ViewData["Title"] = "Authenticator inschakelen";
+    ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
+}
+
+<h4>@ViewData["Title"]</h4>
+<div>
+    <p>Doorloop de volgende stappen om een authenticator in te schakelen:</p>
+    <ol class="list">
+        <li>
+            <p>
+                Download een twee-factor authenticatie app zoals de Microsoft Authenticator voor
+                <a href="https://go.microsoft.com/fwlink/?Linkid=825071">Windows Phone</a>,
+                <a href="https://go.microsoft.com/fwlink/?Linkid=825072">Android</a> en
+                <a href="https://go.microsoft.com/fwlink/?Linkid=825073">iOS</a> 
+                of de Google Authenticator voor
+                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en">Android</a> and
+                <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8">iOS</a>.
+            </p>
+        </li>
+        <li>
+            <p>Scan the QR Code of toets de codes <kbd>@Model.SharedKey</kbd> met behulp van de twee factor authenticatie app.</p>
+            <div id="qrCode"></div>
+            <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
+        </li>
+        <li>
+            <p>
+                Nadat u de code gescand of ingetoetst heeft, kunt u hieronder de code die de app genereert invoeren om de twee-factor authenticatie aan te zetten.
+            </p>
+            <div class="row">
+                <div class="col-md-6">
+                    <form method="post">
+                        <div class="form-group">
+                            <label asp-for="Code" class="control-label">Verification Code</label>
+                            <input asp-for="Code" class="form-control" autocomplete="off" />
+                            <span asp-validation-for="Code" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-default">Verify</button>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    </form>
+                </div>
+            </div>
+        </li>
+    </ol>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script type="text/javascript" src="~/lib/qrcode.js"></script>
+    <script type="text/javascript">
+        new QRCode(document.getElementById("qrCode"),
+            {
+                text: "@Html.Raw(Model.AuthenticatorUri)",
+                width: 150,
+                height: 150
+            });
+    </script>
+}
