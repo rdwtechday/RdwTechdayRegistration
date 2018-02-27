@@ -287,14 +287,21 @@ namespace IdentityTest.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            _logger.LogInformation("User signed out.");
+            return RedirectToAction("SignedOut");
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult SignedOut()
+        {
+            return View();
+        }
+
 
         [HttpPost]
         [AllowAnonymous]

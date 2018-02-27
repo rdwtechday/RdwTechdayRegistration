@@ -1,10 +1,10 @@
 ﻿@model IndexViewModel
 @{
-    ViewData["Title"] = "Profiel";
+    ViewData["Title"] = "Profiel beheer";
+    ViewData["Message"] = "Basis gegevens aanpassen";
     ViewData.AddActivePage(ManageNavPages.Index);
 }
 
-<h4>@ViewData["Title"]</h4>
 @Html.Partial("_StatusMessage", Model.StatusMessage)
 <div class="row">
     <div class="col-md-6">

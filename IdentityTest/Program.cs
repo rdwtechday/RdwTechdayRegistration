@@ -15,7 +15,7 @@ namespace IdentityTest
             {
                 var services = scope.ServiceProvider;
 
-                var context = services.GetRequiredService<ApplicationDbContext>();
+                var context = services.GetRequiredService<IdentityTest.Data.ApplicationDbContext>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             }
             host.Run();

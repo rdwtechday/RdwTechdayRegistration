@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using RdwTechdayRegistration.ValidationHelpers;
+using ApplicationDbContext.ValidationHelpers;
 
 namespace IdentityTest.Models
 {
@@ -15,5 +15,7 @@ namespace IdentityTest.Models
         public string Name{ get; set; }
         [Required]
         public string Organisation { get; set; }
+        public ICollection<ApplicationUserSessie> UserSessies { get; set; }
+
     }
 }

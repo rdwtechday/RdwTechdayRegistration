@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IdentityTest.Data;
+﻿using IdentityTest.Data;
+using IdentityTest.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using RdwTechdayRegistration.Data;
-using RdwTechdayRegistration.Models;
+using System.Threading.Tasks;
 
-namespace RdwTechdayRegistration.Controllers
+namespace IdentityTest.Controllers
 {
-    public class DeelnemersController : Controller
+    public class UsersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IdentityTest.Data.ApplicationDbContext _context;
 
-        public DeelnemersController(ApplicationDbContext context)
+        public UsersController(IdentityTest.Data.ApplicationDbContext context)
         {
             _context = context;
         }
@@ -23,18 +18,18 @@ namespace RdwTechdayRegistration.Controllers
         // GET: Deelnemers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Deelnemers.ToListAsync());
+            return View(await _context.ApplicationUsers.ToListAsync());
         }
 
         // GET: Deelnemers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var deelnemer = await _context.Deelnemers
+            var deelnemer = await _context.ApplicationUsers
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (deelnemer == null)
             {
@@ -51,11 +46,11 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         // POST: Deelnemers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Naam,Organisatie,Email,Telefoon")] Deelnemer deelnemer)
+        public async Task<IActionResult> Create([Bind("Id,Naam,Organisatie,Email,Telefoon")] ApplicationUser deelnemer)
         {
             if (ModelState.IsValid)
             {
@@ -67,14 +62,14 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         // GET: Deelnemers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var deelnemer = await _context.Deelnemers.SingleOrDefaultAsync(m => m.Id == id);
+            var deelnemer = await _context.ApplicationUsers.SingleOrDefaultAsync(m => m.Id == id);
             if (deelnemer == null)
             {
                 return NotFound();
@@ -83,11 +78,11 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         // POST: Deelnemers/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,Organisatie,Email,Telefoon")] Deelnemer deelnemer)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Naam,Organisatie,Email,Telefoon")] ApplicationUser deelnemer)
         {
             if (id != deelnemer.Id)
             {
@@ -96,36 +91,22 @@ namespace RdwTechdayRegistration.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(deelnemer);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DeelnemerExists(deelnemer.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _context.Update(deelnemer);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(deelnemer);
         }
 
         // GET: Deelnemers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var deelnemer = await _context.Deelnemers
+            var deelnemer = await _context.ApplicationUsers
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (deelnemer == null)
             {
@@ -138,17 +119,12 @@ namespace RdwTechdayRegistration.Controllers
         // POST: Deelnemers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var deelnemer = await _context.Deelnemers.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Deelnemers.Remove(deelnemer);
+            var deelnemer = await _context.ApplicationUsers.SingleOrDefaultAsync(m => m.Id == id);
+            _context.ApplicationUsers.Remove(deelnemer);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool DeelnemerExists(int id)
-        {
-            return _context.Deelnemers.Any(e => e.Id == id);
         }
     }
 }

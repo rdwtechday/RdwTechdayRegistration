@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace RdwTechdayRegistration.ValidationHelpers
+namespace ApplicationDbContext.ValidationHelpers
 {
     public class EmailValidator
     {

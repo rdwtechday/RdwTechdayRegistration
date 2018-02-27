@@ -1,7 +1,7 @@
-﻿using RdwTechdayRegistration.Models;
+﻿using IdentityTest.Models;
 using System.Collections.Generic;
 
-namespace RdwTechdayRegistration.Models
+namespace IdentityTest.Models
 {
     public class Deelnemer
     {
@@ -10,7 +10,5 @@ namespace RdwTechdayRegistration.Models
         public string Organisatie { get; set; }
         public string Email { get; set; }
         public string Telefoon { get; set; }
-        public ICollection<DeelnemerSessies> DeelnemerSessies { get; set; }
-        public RegistratieVerzoek RegistratieVerzoek { get; set; }
     }
 }

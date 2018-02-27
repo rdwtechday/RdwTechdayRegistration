@@ -1,11 +1,9 @@
 ﻿@model LoginWith2faViewModel
 @{
-    ViewData["Title"] = "Twee-factor authenticatie";
+    ViewData["Title"] = "Beveiligde gebruiker";
+    ViewData["Message"] = "Voer de twee-factor authenticatie code van de app";
 }
 
-<h2>@ViewData["Title"]</h2>
-<hr />
-<p>Deze gebruiker is beveiligd met twee-factor authenticatie. Voer de code in.</p>
 <div class="row">
     <div class="col-md-4">
         <form method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">

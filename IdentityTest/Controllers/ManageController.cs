@@ -522,7 +522,7 @@ namespace IdentityTest.Controllers
         {
             return string.Format(
                 AuthenticatorUriFormat,
-                _urlEncoder.Encode("RdwTechdayRegistration"),
+                _urlEncoder.Encode("ApplicationDbContext"),
                 _urlEncoder.Encode(email),
                 unformattedKey);
         }

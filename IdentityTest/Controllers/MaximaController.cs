@@ -1,22 +1,21 @@
 ﻿using IdentityTest.Data;
+using IdentityTest.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using RdwTechdayRegistration.Data;
-using RdwTechdayRegistration.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RdwTechdayRegistration.Controllers
+namespace IdentityTest.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class MaximaController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IdentityTest.Data.ApplicationDbContext _context;
         private IConfiguration _configuration;
 
-        public MaximaController(ApplicationDbContext context, IConfiguration configuration)
+        public MaximaController(IdentityTest.Data.ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;

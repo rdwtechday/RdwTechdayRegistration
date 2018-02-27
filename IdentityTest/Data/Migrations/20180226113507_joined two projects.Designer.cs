@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using RdwTechdayRegistration.Models;
 using System;
 
 namespace IdentityTest.Data.Migrations
@@ -181,7 +180,7 @@ namespace IdentityTest.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.Deelnemer", b =>
+            modelBuilder.Entity("IdentityTest.Models.Deelnemer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -205,7 +204,7 @@ namespace IdentityTest.Data.Migrations
                     b.ToTable("Deelnemers");
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.DeelnemerSessies", b =>
+            modelBuilder.Entity("IdentityTest.Models.DeelnemerSessies", b =>
                 {
                     b.Property<int>("DeelnemerId");
 
@@ -218,7 +217,7 @@ namespace IdentityTest.Data.Migrations
                     b.ToTable("DeelnemerSessies");
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.Maxima", b =>
+            modelBuilder.Entity("IdentityTest.Models.Maxima", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -232,7 +231,7 @@ namespace IdentityTest.Data.Migrations
                     b.ToTable("Maxima");
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.RegistratieVerzoek", b =>
+            modelBuilder.Entity("IdentityTest.Models.RegistratieVerzoek", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -258,7 +257,7 @@ namespace IdentityTest.Data.Migrations
                     b.ToTable("RegistratieVerzoeken");
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.Ruimte", b =>
+            modelBuilder.Entity("IdentityTest.Models.Ruimte", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -272,7 +271,7 @@ namespace IdentityTest.Data.Migrations
                     b.ToTable("Ruimtes");
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.Sessie", b =>
+            modelBuilder.Entity("IdentityTest.Models.Sessie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -296,7 +295,7 @@ namespace IdentityTest.Data.Migrations
                     b.ToTable("Sessies");
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.Tijdvak", b =>
+            modelBuilder.Entity("IdentityTest.Models.Tijdvak", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -312,7 +311,7 @@ namespace IdentityTest.Data.Migrations
                     b.ToTable("Tijdvakken");
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.Track", b =>
+            modelBuilder.Entity("IdentityTest.Models.Track", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -326,7 +325,7 @@ namespace IdentityTest.Data.Migrations
                     b.ToTable("Tracks");
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.TrackTijdvak", b =>
+            modelBuilder.Entity("IdentityTest.Models.TrackTijdvak", b =>
                 {
                     b.Property<int>("TrackID");
 
@@ -384,52 +383,52 @@ namespace IdentityTest.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.Deelnemer", b =>
+            modelBuilder.Entity("IdentityTest.Models.Deelnemer", b =>
                 {
-                    b.HasOne("RdwTechdayRegistration.Models.RegistratieVerzoek", "RegistratieVerzoek")
+                    b.HasOne("IdentityTest.Models.RegistratieVerzoek", "RegistratieVerzoek")
                         .WithOne("Deelnemer")
-                        .HasForeignKey("RdwTechdayRegistration.Models.Deelnemer", "RegistratieVerzoekId");
+                        .HasForeignKey("IdentityTest.Models.Deelnemer", "RegistratieVerzoekId");
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.DeelnemerSessies", b =>
+            modelBuilder.Entity("IdentityTest.Models.DeelnemerSessies", b =>
                 {
-                    b.HasOne("RdwTechdayRegistration.Models.Deelnemer", "Deelnemer")
+                    b.HasOne("IdentityTest.Models.Deelnemer", "Deelnemer")
                         .WithMany("DeelnemerSessies")
                         .HasForeignKey("DeelnemerId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("RdwTechdayRegistration.Models.Sessie", "Sessie")
+                    b.HasOne("IdentityTest.Models.Sessie", "Sessie")
                         .WithMany("DeelnemerSessies")
                         .HasForeignKey("SessieId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.Sessie", b =>
+            modelBuilder.Entity("IdentityTest.Models.Sessie", b =>
                 {
-                    b.HasOne("RdwTechdayRegistration.Models.Ruimte", "Ruimte")
+                    b.HasOne("IdentityTest.Models.Ruimte", "Ruimte")
                         .WithMany("Sessies")
                         .HasForeignKey("RuimteId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("RdwTechdayRegistration.Models.Tijdvak", "Tijdvak")
+                    b.HasOne("IdentityTest.Models.Tijdvak", "Tijdvak")
                         .WithMany("Sessies")
                         .HasForeignKey("TijdvakId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("RdwTechdayRegistration.Models.Track", "Track")
+                    b.HasOne("IdentityTest.Models.Track", "Track")
                         .WithMany("Sessies")
                         .HasForeignKey("TrackId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.TrackTijdvak", b =>
+            modelBuilder.Entity("IdentityTest.Models.TrackTijdvak", b =>
                 {
-                    b.HasOne("RdwTechdayRegistration.Models.Tijdvak", "Tijdvak")
+                    b.HasOne("IdentityTest.Models.Tijdvak", "Tijdvak")
                         .WithMany()
                         .HasForeignKey("TijdvakID")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("RdwTechdayRegistration.Models.Track", "Track")
+                    b.HasOne("IdentityTest.Models.Track", "Track")
                         .WithMany("Tijdvakken")
                         .HasForeignKey("TrackID")
                         .OnDelete(DeleteBehavior.Cascade);

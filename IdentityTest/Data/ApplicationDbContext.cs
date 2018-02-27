@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using IdentityTest.Models;
 using Microsoft.AspNetCore.Identity;
-using RdwTechdayRegistration.Models;
 
 namespace IdentityTest.Data
 {
@@ -27,10 +26,6 @@ namespace IdentityTest.Data
             builder.Entity<Sessie>()
                 .ToTable("Sessies");
 
-            builder.Entity<RegistratieVerzoek>()
-                .ToTable("RegistratieVerzoeken")
-                .HasAlternateKey(c => c.Email);
-
             builder.Entity<Tijdvak>()
                 .ToTable("Tijdvakken");
 
@@ -43,26 +38,26 @@ namespace IdentityTest.Data
             builder.Entity<TrackTijdvak>()
                 .ToTable("TrackTijdvakken");
 
-            builder.Entity<DeelnemerSessies>()
-               .HasKey(bc => new { bc.DeelnemerId, bc.SessieId });
+            
+            builder.Entity<ApplicationUserSessie>()
+               .HasKey(bc => new { bc.ApplicationUserId, bc.SessieId });
 
-            builder.Entity<DeelnemerSessies>()
-                .HasOne(bc => bc.Deelnemer)
-                .WithMany(b => b.DeelnemerSessies)
-                .HasForeignKey(bc => bc.DeelnemerId);
+            builder.Entity<ApplicationUserSessie>()
+                .HasOne(bc => bc.ApplicationUser)
+                .WithMany(b => b.UserSessies)
+                .HasForeignKey(bc => bc.ApplicationUserId);
 
-            builder.Entity<DeelnemerSessies>()
+            builder.Entity<ApplicationUserSessie>()
                 .HasOne(bc => bc.Sessie)
-                .WithMany(c => c.DeelnemerSessies)
+                .WithMany(c => c.UserSessies)
                 .HasForeignKey(bc => bc.SessieId);
 
             builder.Entity<TrackTijdvak>()
                 .HasKey(c => new { c.TrackID, c.TijdvakID });
         }
 
-        public DbSet<Deelnemer> Deelnemers { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Sessie> Sessies { get; set; }
-        public DbSet<RegistratieVerzoek> RegistratieVerzoeken { get; set; }
         public DbSet<Ruimte> Ruimtes { get; set; }
         public DbSet<Tijdvak> Tijdvakken { get; set; }
         public DbSet<Track> Tracks { get; set; }
