@@ -37,7 +37,17 @@ body {
     font-weight: bold;
 }
 
-.title-row h2 {
+li.open > #stambellen-dropdown {
+    color: #fff;
+    background-color: #c30;
+    font-weight: bold;
+}
+
+.dropdown-menu > .active > a {
+    background-color: #c30;
+}
+
+ .title-row h2 {
     margin-top: 4px;
 }
 

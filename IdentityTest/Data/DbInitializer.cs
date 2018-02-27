@@ -34,11 +34,6 @@ namespace IdentityTest.Data
         public async Task Initialize()
         {
             _context.Database.EnsureCreated();
-//            if ( _context.Database.GetPendingMigrations().Count() != 0 )
- //           {
-  //              return;
-   //         }
-
 
             // check if roles table populated, if not -> populate
             if (_roleManager.Roles.Select(r => new SelectListItem { Text = r.Name, Value = r.Id }).ToList().Count == 0)
@@ -55,7 +50,7 @@ namespace IdentityTest.Data
             if (user == null)
             {
                 // add admin user
-                var appuser = new ApplicationUser { UserName = userid, Email = userid, EmailConfirmed = true };
+                var appuser = new ApplicationUser { UserName = userid, Email = userid, EmailConfirmed = true, Name=userid, Organisation = "RdwTechday" };
                 IdentityResult result = await _userManager.CreateAsync(appuser, password);
                 if (!result.Succeeded)
                 {
