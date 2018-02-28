@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <UserSecretsId>aspnet-IdentityTest-73D47E65-6A9B-4AE2-A6DD-FAFB06BC9C37</UserSecretsId>
+    <ApplicationInsightsResourceId>/subscriptions/3b4cd8ca-b284-46be-a170-6f83bd74e73d/resourcegroups/rg-tvi-02/providers/microsoft.insights/components/rdwtechdayregistration</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/3b4cd8ca-b284-46be-a170-6f83bd74e73d/resourcegroups/rg-tvi-02/providers/microsoft.insights/components/rdwtechdayregistration</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
 
@@ -10,6 +12,7 @@
     <PackageReference Include="Bogus" Version="22.0.2" />
     <PackageReference Include="bootstrap" Version="4.0.0" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.6.362" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" PrivateAssets="All" />
@@ -21,6 +24,10 @@
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
     <DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.6.362" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
 </Project>
