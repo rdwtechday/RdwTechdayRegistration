@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace IdentityTest.Data.Migrations
+namespace IdentityTest.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180227191757_JoinedTwoSolutions")]
-    partial class JoinedTwoSolutions
+    [DbContext(typeof(IdentityTest.Data.ApplicationDbContext))]
+    [Migration("20180228010301_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

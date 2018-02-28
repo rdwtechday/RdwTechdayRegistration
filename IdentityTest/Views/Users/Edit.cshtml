@@ -1,4 +1,4 @@
-﻿@model IdentityTest.Models.Deelnemer
+﻿@model IdentityTest.Models.ApplicationUser
 
 @{
     ViewData["Title"] = "Users";
@@ -11,14 +11,14 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Naam" class="control-label"></label>
-                <input asp-for="Naam" class="form-control" />
-                <span asp-validation-for="Naam" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Organisatie" class="control-label"></label>
-                <input asp-for="Organisatie" class="form-control" />
-                <span asp-validation-for="Organisatie" class="text-danger"></span>
+                <label asp-for="Organisation" class="control-label"></label>
+                <input asp-for="Organisation" class="form-control" />
+                <span asp-validation-for="Organisation" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
@@ -26,9 +26,9 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Telefoon" class="control-label"></label>
-                <input asp-for="Telefoon" class="form-control" />
-                <span asp-validation-for="Telefoon" class="text-danger"></span>
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />

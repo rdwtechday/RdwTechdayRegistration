@@ -82,7 +82,7 @@ namespace IdentityTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Naam,Organisatie,Email,Telefoon")] ApplicationUser deelnemer)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,Organisation,Email,PhoneNumber")] ApplicationUser deelnemer)
         {
             if (id != deelnemer.Id)
             {

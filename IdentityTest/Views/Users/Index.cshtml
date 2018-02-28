@@ -1,11 +1,9 @@
-﻿@model IEnumerable<IdentityTest.Models.Deelnemer>
+﻿@model IEnumerable<IdentityTest.Models.ApplicationUser>
 
 @{
     ViewData["Title"] = "Users";
     ViewData["Message"] = "Inzien en Bewerken";
 }
-
-
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -13,16 +11,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Naam)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Organisatie)
+                @Html.DisplayNameFor(model => model.Organisation)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Telefoon)
+                @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
             <th></th>
         </tr>
@@ -32,16 +30,16 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Naam)
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Organisatie)
+                    @Html.DisplayFor(modelItem => item.Organisation)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Telefoon)
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
