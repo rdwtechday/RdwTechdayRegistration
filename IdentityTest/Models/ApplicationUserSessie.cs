@@ -1,4 +1,4 @@
-﻿namespace IdentityTest.Models
+﻿namespace RdwTechdayRegistration.Models
 {
     public class ApplicationUserSessie
     {

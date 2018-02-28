@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IdentityTest.Models.ManageViewModels
+namespace RdwTechdayRegistration.Models.ManageViewModels
 {
     public class IndexViewModel : IValidatableObject
     {

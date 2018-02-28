@@ -1,6 +1,6 @@
 using System;
 
-namespace IdentityTest.Models
+namespace RdwTechdayRegistration.Models
 {
     public class ErrorViewModel
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using IdentityTest.Services;
+using RdwTechdayRegistration.Services;
 
-namespace IdentityTest.Services
+namespace RdwTechdayRegistration.Services
 {
     public static class EmailSenderExtensions
     {

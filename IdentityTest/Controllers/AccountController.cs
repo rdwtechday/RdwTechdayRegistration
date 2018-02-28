@@ -1,6 +1,6 @@
-﻿using IdentityTest.Models;
-using IdentityTest.Models.AccountViewModels;
-using IdentityTest.Services;
+﻿using RdwTechdayRegistration.Models;
+using RdwTechdayRegistration.Models.AccountViewModels;
+using RdwTechdayRegistration.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +10,7 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace IdentityTest.Controllers
+namespace RdwTechdayRegistration.Controllers
 {
     [Authorize]
     [Route("[controller]/[action]")]

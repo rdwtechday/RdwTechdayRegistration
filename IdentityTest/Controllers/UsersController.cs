@@ -1,16 +1,16 @@
-﻿using IdentityTest.Data;
-using IdentityTest.Models;
+﻿using RdwTechdayRegistration.Data;
+using RdwTechdayRegistration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
-namespace IdentityTest.Controllers
+namespace RdwTechdayRegistration.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly IdentityTest.Data.ApplicationDbContext _context;
+        private readonly RdwTechdayRegistration.Data.ApplicationDbContext _context;
 
-        public UsersController(IdentityTest.Data.ApplicationDbContext context)
+        public UsersController(RdwTechdayRegistration.Data.ApplicationDbContext context)
         {
             _context = context;
         }

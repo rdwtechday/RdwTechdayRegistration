@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IdentityTest.Models
+namespace RdwTechdayRegistration.Models
 {
     public class Maxima
     {

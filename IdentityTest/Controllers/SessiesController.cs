@@ -1,4 +1,4 @@
-﻿using IdentityTest.Models;
+﻿using RdwTechdayRegistration.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IdentityTest.Controllers
+namespace RdwTechdayRegistration.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class SessiesController : Controller
     {
-        private readonly IdentityTest.Data.ApplicationDbContext _context;
+        private readonly RdwTechdayRegistration.Data.ApplicationDbContext _context;
 
         private void PopulateTracksDropDownList(object selectedTrack = null)
         {
@@ -37,7 +37,7 @@ namespace IdentityTest.Controllers
             ViewBag.RuimteId = new SelectList(query.AsNoTracking(), "Id", "Naam", selectedRuimte);
         }
 
-        public SessiesController(IdentityTest.Data.ApplicationDbContext context)
+        public SessiesController(RdwTechdayRegistration.Data.ApplicationDbContext context)
         {
             _context = context;
         }

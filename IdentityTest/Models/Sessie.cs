@@ -1,7 +1,7 @@
-﻿using IdentityTest.Models;
+﻿using RdwTechdayRegistration.Models;
 using System.Collections.Generic;
 
-namespace IdentityTest.Models
+namespace RdwTechdayRegistration.Models
 {
     public class Sessie
     {

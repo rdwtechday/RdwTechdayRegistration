@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using IdentityTest.Models;
+using RdwTechdayRegistration.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace IdentityTest.Data
+namespace RdwTechdayRegistration.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser,IdentityRole,string>
     {

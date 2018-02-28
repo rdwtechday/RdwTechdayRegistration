@@ -7,7 +7,7 @@ using SendGrid.Helpers.Mail;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 
-namespace IdentityTest.Services
+namespace RdwTechdayRegistration.Services
 {
     // This class is used by the application to send email for account confirmation and password reset.
     // For more details see https://go.microsoft.com/fwlink/?LinkID=532713

@@ -1,18 +1,18 @@
-﻿using IdentityTest.Models;
+﻿using RdwTechdayRegistration.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IdentityTest.Controllers
+namespace RdwTechdayRegistration.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class TracksController : Controller
     {
-        private readonly IdentityTest.Data.ApplicationDbContext _context;
+        private readonly RdwTechdayRegistration.Data.ApplicationDbContext _context;
 
-        public TracksController(IdentityTest.Data.ApplicationDbContext context)
+        public TracksController(RdwTechdayRegistration.Data.ApplicationDbContext context)
         {
             _context = context;
         }

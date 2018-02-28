@@ -1,9 +1,9 @@
-﻿using IdentityTest.Models;
+﻿using RdwTechdayRegistration.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace IdentityTest.Controllers
+namespace RdwTechdayRegistration.Controllers
 {
     public class HomeController : Controller
     {

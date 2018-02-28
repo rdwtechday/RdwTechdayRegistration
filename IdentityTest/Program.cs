@@ -1,10 +1,10 @@
-﻿using IdentityTest.Data;
+﻿using RdwTechdayRegistration.Data;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace IdentityTest
+namespace RdwTechdayRegistration
 {
     public class Program
     {
@@ -15,7 +15,7 @@ namespace IdentityTest
             {
                 var services = scope.ServiceProvider;
 
-                var context = services.GetRequiredService<IdentityTest.Data.ApplicationDbContext>();
+                var context = services.GetRequiredService<RdwTechdayRegistration.Data.ApplicationDbContext>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             }
             host.Run();

@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using IdentityTest.Models;
-using IdentityTest.Models.ManageViewModels;
-using IdentityTest.Services;
+using RdwTechdayRegistration.Models;
+using RdwTechdayRegistration.Models.ManageViewModels;
+using RdwTechdayRegistration.Services;
 
-namespace IdentityTest.Controllers
+namespace RdwTechdayRegistration.Controllers
 {
     [Authorize]
     [Route("[controller]/[action]")]

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
-namespace IdentityTest.Migrations
+namespace RdwTechdayRegistration.Migrations
 {
     public partial class Initial : Migration
     {

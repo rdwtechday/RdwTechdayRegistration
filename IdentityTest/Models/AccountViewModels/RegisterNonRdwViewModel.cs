@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IdentityTest.Models.AccountViewModels
+namespace RdwTechdayRegistration.Models.AccountViewModels
 {
     public class RegisterNonRdwViewModel : IValidatableObject
     {

@@ -1,19 +1,19 @@
-﻿using IdentityTest.Data;
-using IdentityTest.Models;
+﻿using RdwTechdayRegistration.Data;
+using RdwTechdayRegistration.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IdentityTest.Controllers
+namespace RdwTechdayRegistration.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class TijdvakkenController : Controller
     {
-        private readonly IdentityTest.Data.ApplicationDbContext _context;
+        private readonly RdwTechdayRegistration.Data.ApplicationDbContext _context;
 
-        public TijdvakkenController(IdentityTest.Data.ApplicationDbContext context)
+        public TijdvakkenController(RdwTechdayRegistration.Data.ApplicationDbContext context)
         {
             _context = context;
         }

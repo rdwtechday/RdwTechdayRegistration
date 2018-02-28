@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using IdentityTest.Data;
-using IdentityTest.Models;
-using IdentityTest.Services;
+using RdwTechdayRegistration.Data;
+using RdwTechdayRegistration.Models;
+using RdwTechdayRegistration.Services;
 
-namespace IdentityTest
+namespace RdwTechdayRegistration
 {
     public class Startup
     {
@@ -26,11 +26,11 @@ namespace IdentityTest
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<IdentityTest.Data.ApplicationDbContext>(options =>
+            services.AddDbContext<RdwTechdayRegistration.Data.ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityTest.Data.ApplicationDbContext>()
+                .AddEntityFrameworkStores<RdwTechdayRegistration.Data.ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             // Add application services.

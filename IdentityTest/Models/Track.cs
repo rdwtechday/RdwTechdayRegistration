@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace IdentityTest.Models
+namespace RdwTechdayRegistration.Models
 {
     public class Track
     {

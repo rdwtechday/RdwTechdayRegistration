@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace IdentityTest.Data
+namespace RdwTechdayRegistration.Data
 {
     public interface IDbInitializer
     {

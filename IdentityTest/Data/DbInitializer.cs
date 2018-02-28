@@ -1,4 +1,4 @@
-﻿using IdentityTest.Models;
+﻿using RdwTechdayRegistration.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Bogus;
 using System.Collections.Generic;
 
-namespace IdentityTest.Data
+namespace RdwTechdayRegistration.Data
 {
     public class DbInitializer : IDbInitializer
     {
