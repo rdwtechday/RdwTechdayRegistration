@@ -3,16 +3,19 @@ using RdwTechdayRegistration.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace RdwTechdayRegistration.Controllers
 {
     public class UsersController : Controller
     {
         private readonly RdwTechdayRegistration.Data.ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UsersController(RdwTechdayRegistration.Data.ApplicationDbContext context)
+        public UsersController(RdwTechdayRegistration.Data.ApplicationDbContext context, UserManager<ApplicationUser> userManager) 
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Deelnemers
@@ -122,7 +125,7 @@ namespace RdwTechdayRegistration.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var deelnemer = await _context.ApplicationUsers.SingleOrDefaultAsync(m => m.Id == id);
-            _context.ApplicationUsers.Remove(deelnemer);
+            await _userManager.DeleteAsync(deelnemer);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

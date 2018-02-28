@@ -1,5 +1,4 @@
-﻿using RdwTechdayRegistration.Models;
-using RdwTechdayRegistration.Models.AccountViewModels;
+﻿using RdwTechdayRegistration.Models.AccountViewModels;
 using RdwTechdayRegistration.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using RdwTechdayRegistration.Models;
 
 namespace RdwTechdayRegistration.Controllers
 {
@@ -237,7 +237,7 @@ namespace RdwTechdayRegistration.Controllers
                     var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                     var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailAsync(model.Email, "Welkom bij de RDW Techday",
-                       $"Wij hebben een account voor u aangemaakt. Om daar toegang toe te krijgen dient u via de volgende link een wachtwoord in te stellen: <a href='{callbackUrl}'>link</a>");
+                       $"Wij hebben een account voor u aangemaakt. Om daar toegang toe te krijgen dient u via de volgende link een nieuw wachtwoord in te stellen: <a href='{callbackUrl}'>link</a>");
                     return RedirectToLocal(returnUrl);
 
                 }
@@ -414,7 +414,7 @@ namespace RdwTechdayRegistration.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if (user == null )
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return RedirectToAction(nameof(ForgotPasswordConfirmation));
@@ -442,13 +442,22 @@ namespace RdwTechdayRegistration.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult ResetPassword(string code = null)
+        public async Task<IActionResult> ResetPassword(string code = null)
         {
             if (code == null)
             {
-                throw new ApplicationException("A code must be supplied for password reset.");
+                return View("AccessDenied");
+            }
+            if (User.Identity.IsAuthenticated )    
+            {
+                // strange case found by a tester where a user was logged in and used a reset link 
+                // this will bork the reset system
+                // log out and starting this method afresh will ensure a correct processing of the request
+                await _signInManager.SignOutAsync();
+                return RedirectToAction(nameof(ResetPassword), new { code = code });
             }
             var model = new ResetPasswordViewModel { Code = code };
+            //return RedirectToAction("Action", new { id = 99 });
             return View(model);
         }
 
@@ -464,6 +473,7 @@ namespace RdwTechdayRegistration.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null)
             {
+                // sign to prevent strange effects
                 var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
                 if (result.Succeeded)
                 {
@@ -471,6 +481,7 @@ namespace RdwTechdayRegistration.Controllers
                     await _userManager.SetLockoutEnabledAsync(user, false);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     await _userManager.ConfirmEmailAsync(user, code);
+                    var signingresult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: true);
                     return RedirectToAction(nameof(ResetPasswordConfirmation));
                 }
             }
