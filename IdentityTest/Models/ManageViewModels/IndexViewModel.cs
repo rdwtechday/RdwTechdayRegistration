@@ -7,32 +7,28 @@ using System.Threading.Tasks;
 
 namespace RdwTechdayRegistration.Models.ManageViewModels
 {
-    public class IndexViewModel : IValidatableObject
+    public class IndexViewModel 
     {
 
-        [Display(Name= "Gebruikersnaam")]
-        public string Username { get; set; }
+        [Display(Name= "Login")]
+        public string Email { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
 
+
         [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Naam")]
+        public string Name{ get; set; }
 
         [Phone]
         [Display(Name = "Telefoonnummer")]
         public string PhoneNumber { get; set; }
 
-        public string StatusMessage { get; set; }
+        [Required]
+        [Display(Name = "Organisatie")]
+        public string Organisation { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (!EmailValidator.IsValid(Email))
-            {
-                yield return new ValidationResult(
-                    $"Vul een e-mail adres in", new[] { "Email" });
-            }
-        }
+        public string StatusMessage { get; set; }
 
     }
 }

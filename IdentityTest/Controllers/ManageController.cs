@@ -57,8 +57,9 @@ namespace RdwTechdayRegistration.Controllers
 
             var model = new IndexViewModel
             {
-                Username = user.UserName,
                 Email = user.Email,
+                Name = user.Name,
+                Organisation = user.Organisation,
                 PhoneNumber = user.PhoneNumber,
                 IsEmailConfirmed = user.EmailConfirmed,
                 StatusMessage = StatusMessage
@@ -82,24 +83,15 @@ namespace RdwTechdayRegistration.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var email = user.Email;
-            if (model.Email != email)
-            {
-                var setEmailResult = await _userManager.SetEmailAsync(user, model.Email);
-                if (!setEmailResult.Succeeded)
-                {
-                    throw new ApplicationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
-                }
-            }
+            user.Name = model.Name;
+            user.PhoneNumber = model.PhoneNumber;
+            user.Organisation = model.Organisation;
 
-            var phoneNumber = user.PhoneNumber;
-            if (model.PhoneNumber != phoneNumber)
+            var result = await _userManager.UpdateAsync(user);
+                
+            if (!result.Succeeded)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    throw new ApplicationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
-                }
+                throw new ApplicationException($"Unexpected error occurred updating user with ID '{user.Id}'.");
             }
 
             StatusMessage = "Your profile has been updated";
