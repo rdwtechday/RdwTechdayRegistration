@@ -21,7 +21,7 @@ namespace RdwTechdayRegistration.Models.AccountViewModels
         [Required]
         [StringLength(100, ErrorMessage = "Het {0} moet minimaal {2} en maximaal {1} karakters lang zijn.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Password, gebruik hiervoor niet uw RDW wachtwoord")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
