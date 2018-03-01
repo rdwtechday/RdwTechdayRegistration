@@ -1,15 +1,31 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using RdwTechdayRegistration.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
     ViewData["Title"] = "RDW Techday Registratie";
     ViewData["Message"] = "Welkom op deze site!";
 }
 
+@if (!SignInManager.IsSignedIn(User))
+{
+    <div class="jumbotron">
+        <h2>Welkom bij de registratie voor de RDW Techday!</h2>
+        <p>Op deze site kunt u zich registreren voor het RDW Techday event. <br />Meer informatie nodig over het event? Ga dan naar de <a href="http://rdwtechday.nl" target="_blank">site</a> van het event.</p>
+        <p>RDW Medewerkers kunnen zich direct inschrijven via de <a asp-area="" asp-controller="Account" asp-action="Register">Registreer link</a></p>
+        <p>Na inschrijving en het bevestigen van de e-mail kunt u kiezen aan welke sessies u deel wil nemen.</p>
+        <br />
+        <p>Bent u geen RDW'er en is uw bedrijf wel lid van Samenwerking Noord? Dan kunt u zich opgeven voor het event via de <a href="http://samenwerkingnoord.nl">Samenwerking Noord</a>.</p>
+    </div>
+}
+else
+{
+    <div class="jumbotron">
+        <h2> Welkom @UserManager.GetUserAsync(User).Result.Name!</h2>
+        <p> Wilt u deelnemen aan sessies, dan is het belangrijk dat u zich voor die sessies <a asp-area="" asp-controller="Sessies" asp-action="Select">aanmeldt</a>. 
+        De Techday 2017 heeft ons geleerd dat sommige sessies overvol zijn. Daarom controleren wij dit jaar de toegang tot de zalen.  Gok dus niet op een plekje, meld u aan voor de sessies!</p>
+        <p>Uw naam en organisatie worden vermeld op de congres-badge, mocht u uw naam willen aanpassen, dan kan dat <a asp-area="" asp-controller="Manage" asp-action="Index">hier</a></p>
+    </div>
 
-<div class="jumbotron">
-    <h2>Welkom bij de registratie voor de RDW Techday!</h2>
-    <p>Op deze site kunt u zich registreren voor het RDW Techday event. <br />Meer informatie nodig over het event? Ga dan naar de <a href="http://rdwtechday.nl" target="_blank">site</a> van het event.</p>
-    <p>RDW Medewerkers kunnen zich direct inschrijven via de <a asp-area="" asp-controller="Account" asp-action="Register">Registreer link</a></p>
-    <p>Na inschrijving en het bevestigen van de e-mail kunt u kiezen aan welke sessies u deel wil nemen.</p>
-    <br/>
-    <p>Bent u geen RDW'er en is uw bedrijf wel lid van Samenwerking Noord? Dan kunt u zich opgeven voor het event via de <a href="http://samenwerkingnoord.nl">Samenwerking Noord</a>.</p>
-</div>
+}
 
