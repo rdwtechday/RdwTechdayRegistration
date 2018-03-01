@@ -11,9 +11,18 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Naam)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Naam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ruimte)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Track)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tijdvak)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -22,6 +31,15 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Naam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ruimte.Naam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Track.Naam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tijdvak.Start) - @Html.DisplayFor(modelItem => item.Tijdvak.Einde)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

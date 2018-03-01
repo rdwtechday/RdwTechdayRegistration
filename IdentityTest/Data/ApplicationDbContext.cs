@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RdwTechdayRegistration.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace RdwTechdayRegistration.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser,IdentityRole,string>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -24,13 +20,27 @@ namespace RdwTechdayRegistration.Data
             // Add your customizations after calling base.OnModelCreating(builder);
 
             builder.Entity<Sessie>()
-                .ToTable("Sessies");
+                .ToTable("Sessies")
+                .HasOne(s => s.Ruimte)
+                .WithMany(r => r.Sessies)
+                .OnDelete(DeleteBehavior.SetNull);
 
-            builder.Entity<Tijdvak>()
-                .ToTable("Tijdvakken");
+            builder.Entity<Sessie>()
+                .HasOne(s => s.Track)
+                .WithMany(r => r.Sessies)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<Sessie>()
+                .HasOne(s => s.Tijdvak)
+                .WithMany(r => r.Sessies)
+                .OnDelete(DeleteBehavior.SetNull);
+
 
             builder.Entity<Ruimte>()
                 .ToTable("Ruimtes");
+
+            builder.Entity<Tijdvak>()
+                .ToTable("Tijdvakken");
 
             builder.Entity<Maxima>()
                 .ToTable("Maxima");
@@ -38,7 +48,6 @@ namespace RdwTechdayRegistration.Data
             builder.Entity<TrackTijdvak>()
                 .ToTable("TrackTijdvakken");
 
-            
             builder.Entity<ApplicationUserSessie>()
                .HasKey(bc => new { bc.ApplicationUserId, bc.SessieId });
 

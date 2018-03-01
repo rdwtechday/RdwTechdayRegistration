@@ -220,9 +220,9 @@ namespace RdwTechdayRegistration.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Naam = table.Column<string>(nullable: true),
-                    RuimteId = table.Column<int>(nullable: false),
-                    TijdvakId = table.Column<int>(nullable: false),
-                    TrackId = table.Column<int>(nullable: false)
+                    RuimteId = table.Column<int>(nullable: true),
+                    TijdvakId = table.Column<int>(nullable: true),
+                    TrackId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -232,19 +232,19 @@ namespace RdwTechdayRegistration.Migrations
                         column: x => x.RuimteId,
                         principalTable: "Ruimtes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Sessies_Tijdvakken_TijdvakId",
                         column: x => x.TijdvakId,
                         principalTable: "Tijdvakken",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Sessies_Tracks_TrackId",
                         column: x => x.TrackId,
                         principalTable: "Tracks",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(

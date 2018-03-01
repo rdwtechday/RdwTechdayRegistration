@@ -1,4 +1,4 @@
-﻿using ApplicationDbContext.ValidationHelpers;
+﻿using RdwTechdayRegistration.ValidationHelpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

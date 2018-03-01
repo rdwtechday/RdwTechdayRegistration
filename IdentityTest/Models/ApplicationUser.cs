@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using ApplicationDbContext.ValidationHelpers;
+using RdwTechdayRegistration.ValidationHelpers;
 
 namespace RdwTechdayRegistration.Models
 {

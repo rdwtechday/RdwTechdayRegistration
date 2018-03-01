@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace RdwTechdayRegistration.Controllers
 {
@@ -45,7 +46,12 @@ namespace RdwTechdayRegistration.Controllers
         // GET: Sessies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sessies.ToListAsync());
+            List<Sessie> sessies = await _context.Sessies
+                .Include(c => c.Ruimte)
+                .Include(c => c.Tijdvak)
+                .Include(c => c.Track)
+                .ToListAsync();
+            return View(sessies);
         }
 
         // GET: Sessies/Details/5
@@ -117,7 +123,7 @@ namespace RdwTechdayRegistration.Controllers
             }
             PopulateTracksDropDownList(sessie.TrackId);
             PopulateTijdvakDropDownList(sessie.TijdvakId);
-            PopulateRuimtesDropDownList(sessie.RuimteId);
+            PopulateRuimtesDropDownList( sessie.RuimteId );
             return View(sessie);
         }
 

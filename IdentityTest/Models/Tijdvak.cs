@@ -11,5 +11,6 @@ namespace RdwTechdayRegistration.Models
         public string Start { get; set; }
         public string Einde { get; set; }
         public List<Sessie> Sessies { get; set; }
+
     }
 }
