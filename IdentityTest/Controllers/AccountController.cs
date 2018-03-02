@@ -557,6 +557,14 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AddAdminRole()
+        {
+            return View();
+        }
+
+
+        [HttpGet]
         public IActionResult AccessDenied()
         {
             return View();

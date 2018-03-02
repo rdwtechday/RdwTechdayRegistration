@@ -45,7 +45,15 @@
                     }}
                 </td>
                 <td>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> | 
+                    @if (item.isAdmin)
+                    {
+                        <a asp-action="RevokeAdminRole" asp-route-id="@item.Id">Intrekken Administrator</a>
+                    }
+                    else
+                    {
+                        <a asp-action="AddAdminRole" asp-route-id="@item.Id">Maak Administrator</a>
+                    }
                 </td>
             </tr>
         }

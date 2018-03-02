@@ -1,22 +1,21 @@
-﻿using RdwTechdayRegistration.Data;
-using RdwTechdayRegistration.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RdwTechdayRegistration.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
 
 namespace RdwTechdayRegistration.Controllers
 
 {
     [Authorize(Roles = "Admin")]
-
     public class UsersController : Controller
     {
         private readonly RdwTechdayRegistration.Data.ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public UsersController(RdwTechdayRegistration.Data.ApplicationDbContext context, UserManager<ApplicationUser> userManager) 
+        public UsersController(RdwTechdayRegistration.Data.ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -25,7 +24,13 @@ namespace RdwTechdayRegistration.Controllers
         // GET: Deelnemers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ApplicationUsers.ToListAsync());
+            List<ApplicationUser> users = await _context.ApplicationUsers.ToListAsync();
+            // brute force, maybe refactor if too slow
+            foreach (ApplicationUser user in users)
+            {
+                user.isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            }
+            return View(users);
         }
 
         // GET: Deelnemers/Delete/5
@@ -56,5 +61,70 @@ namespace RdwTechdayRegistration.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AddAdminRole(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var deelnemer = await _context.ApplicationUsers
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (deelnemer == null)
+            {
+                return NotFound();
+            }
+
+            return View(deelnemer);
+        }
+
+
+        [HttpPost, ActionName("AddAdminRole")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAdminRoleConfirmed(string id)
+        {
+            ApplicationUser deelnemer = await _context.ApplicationUsers.SingleOrDefaultAsync(m => m.Id == id);
+
+            if ( !( await _userManager.IsInRoleAsync(deelnemer, "Admin") ) )
+            {
+                await _userManager.AddToRoleAsync(deelnemer, "Admin");
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RevokeAdminRole(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var deelnemer = await _context.ApplicationUsers
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (deelnemer == null)
+            {
+                return NotFound();
+            }
+
+            return View(deelnemer);
+        }
+
+        [HttpPost, ActionName("RevokeAdminRole")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RevokeAdminRoleConfirmed(string id)
+        {
+            var deelnemer = await _context.ApplicationUsers.SingleOrDefaultAsync(m => m.Id == id);
+            if ( await _userManager.IsInRoleAsync(deelnemer, "Admin"))
+            {
+                await _userManager.RemoveFromRoleAsync(deelnemer, "Admin");
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

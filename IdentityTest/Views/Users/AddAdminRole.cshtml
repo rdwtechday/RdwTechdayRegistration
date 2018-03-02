@@ -1,0 +1,42 @@
+﻿@model RdwTechdayRegistration.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Deelnemer";
+    ViewData["Message"] = "Tot admin maken";
+}
+
+<h3>Weet u zeker dat u deze gebruiker tot administrator wil maken?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Organisation)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+    </dl>
+
+    <form asp-action="AddAdminRole">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Maak administrator" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

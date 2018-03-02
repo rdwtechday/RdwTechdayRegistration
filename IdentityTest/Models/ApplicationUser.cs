@@ -1,10 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using RdwTechdayRegistration.ValidationHelpers;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RdwTechdayRegistration.Models
 {
@@ -13,7 +10,8 @@ namespace RdwTechdayRegistration.Models
     {
         [Required]
         [Display(Name = "Naam")]
-        public string Name{ get; set; }
+        public string Name { get; set; }
+
         [Required]
         [Display(Name = "Organisatie")]
         public string Organisation { get; set; }
@@ -21,7 +19,10 @@ namespace RdwTechdayRegistration.Models
         // override it so we can localize the displaystring
         [Display(Name = "Telefoonnummer")]
         public override string PhoneNumber { get => base.PhoneNumber; set => base.PhoneNumber = value; }
+
         public ICollection<ApplicationUserSessie> UserSessies { get; set; }
 
+        [NotMapped]
+        public bool isAdmin { get; set; }
     }
 }
