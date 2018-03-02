@@ -237,13 +237,20 @@ namespace RdwTechdayRegistration.Controllers
                     var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                     var callbackUrl = Url.RegisterNonRDWCallbackLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailAsync(model.Email, "Welkom bij de RDW Techday",
-                       $"Wij hebben een account voor u aangemaakt. Om daar toegang toe te krijgen dient u via de volgende link een nieuw wachtwoord in te stellen: <a href='{callbackUrl}'>link</a>");
-                    return RedirectToLocal(returnUrl);
+                       $"Wij hebben een account voor u aangemaakt waarmee u zich kunt registreren voor sessies op de RDW Techday. Om toegang te krijgen, dient u een nieuw wachtwoord in te stellen via de volgende <a href='{callbackUrl}'>link</a>");
+                    return Redirect(nameof(RegisterNonRdwConfirmation));
                 }
                 AddErrors(result);
             }
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult RegisterNonRdwConfirmation()
+        {
+            return View();
         }
 
         [HttpGet]
