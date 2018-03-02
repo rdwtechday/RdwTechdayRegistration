@@ -46,13 +46,19 @@
                 </td>
                 <td>
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> | 
-                    @if (item.isAdmin)
+                    @if ( item.UserName != User.Identity.Name)
                     {
-                        <a asp-action="RevokeAdminRole" asp-route-id="@item.Id">Intrekken Administrator</a>
-                    }
-                    else
+                        @if ( item.isAdmin )
+                        {
+                            <a asp-action="RevokeAdminRole" asp-route-id="@item.Id">Intrekken Administrator</a>
+                        }
+                        else
+                        {
+                            <a asp-action="AddAdminRole" asp-route-id="@item.Id">Maak Administrator</a>
+                        }
+                    } else
                     {
-                        <a asp-action="AddAdminRole" asp-route-id="@item.Id">Maak Administrator</a>
+                        <span>Dit bent u zelf</span>
                     }
                 </td>
             </tr>
