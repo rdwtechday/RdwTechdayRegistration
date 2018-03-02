@@ -1,14 +1,14 @@
-﻿using RdwTechdayRegistration.Models.AccountViewModels;
-using RdwTechdayRegistration.Services;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RdwTechdayRegistration.Models;
+using RdwTechdayRegistration.Models.AccountViewModels;
+using RdwTechdayRegistration.Services;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using RdwTechdayRegistration.Models;
 
 namespace RdwTechdayRegistration.Controllers
 {
@@ -235,16 +235,63 @@ namespace RdwTechdayRegistration.Controllers
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
+                    var callbackUrl = Url.RegisterNonRDWCallbackLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailAsync(model.Email, "Welkom bij de RDW Techday",
                        $"Wij hebben een account voor u aangemaakt. Om daar toegang toe te krijgen dient u via de volgende link een nieuw wachtwoord in te stellen: <a href='{callbackUrl}'>link</a>");
                     return RedirectToLocal(returnUrl);
-
                 }
                 AddErrors(result);
             }
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterNonRdwCallback(string code = null)
+        {
+            if (code == null)
+            {
+                return View("AccessDenied");
+            }
+            if (User.Identity.IsAuthenticated)
+            {
+                // strange case found by a tester where a user was logged in and used a reset link
+                // this will bork the reset system
+                // log out and starting this method afresh will ensure a correct processing of the request
+                await _signInManager.SignOutAsync();
+                return RedirectToAction(nameof(RegisterNonRdwCallback), new { code = code });
+            }
+            var model = new ResetPasswordViewModel { Code = code };
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterNonRdwCallback(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                // sign to prevent strange effects
+                var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+                if (result.Succeeded)
+                {
+                    // reset lockout
+                    await _userManager.SetLockoutEnabledAsync(user, false);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    await _userManager.ConfirmEmailAsync(user, code);
+                    var signingresult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: true);
+                    return Redirect(Url.Content("~/"));
+                }
+            }
+            ModelState.AddModelError("Email", "Er zit een fout in de door u verstrekte gegevens. Is het e-mail adres dezelfde als waar u de u de link op ontvangen hebt?");
+            return View();
         }
 
         [HttpGet]
@@ -294,7 +341,6 @@ namespace RdwTechdayRegistration.Controllers
             return View();
         }
 
-
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
@@ -309,7 +355,6 @@ namespace RdwTechdayRegistration.Controllers
         {
             return View();
         }
-
 
         [HttpPost]
         [AllowAnonymous]
@@ -422,7 +467,7 @@ namespace RdwTechdayRegistration.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null )
+                if (user == null)
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return RedirectToAction(nameof(ForgotPasswordConfirmation));
@@ -456,9 +501,9 @@ namespace RdwTechdayRegistration.Controllers
             {
                 return View("AccessDenied");
             }
-            if (User.Identity.IsAuthenticated )    
+            if (User.Identity.IsAuthenticated)
             {
-                // strange case found by a tester where a user was logged in and used a reset link 
+                // strange case found by a tester where a user was logged in and used a reset link
                 // this will bork the reset system
                 // log out and starting this method afresh will ensure a correct processing of the request
                 await _signInManager.SignOutAsync();

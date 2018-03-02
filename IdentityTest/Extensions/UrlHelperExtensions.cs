@@ -25,5 +25,15 @@ namespace Microsoft.AspNetCore.Mvc
                 values: new { userId, code },
                 protocol: scheme);
         }
+
+        public static string RegisterNonRDWCallbackLink(this IUrlHelper urlHelper, string userId, string code, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(AccountController.RegisterNonRdwCallback),
+                controller: "Account",
+                values: new { userId, code },
+                protocol: scheme);
+        }
+
     }
 }
