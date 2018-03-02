@@ -11,7 +11,7 @@ namespace RdwTechdayRegistration.Models.AccountViewModels
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "RDW e-mail")]
         public string Email { get; set; }
 
         [Required]
