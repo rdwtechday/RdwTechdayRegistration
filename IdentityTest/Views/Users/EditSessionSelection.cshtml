@@ -10,7 +10,12 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="col-md-10">
-                <p><span class="label label-primary label-sessieselect">Track: @(sessie.Track.Naam)</span> @(sessie.TimeRange())</p>
+                <p><span class="label label-primary label-sessieselect" style="background-color: #@(sessie.Track.Rgb);">Track: @(sessie.Track.Naam)</span> @(sessie.TimeRange())
+                @if ( sessie.SessieTijdvakken.Count() > 1)
+                {
+                    <span class="label label-primary label-sessieselect">Lange sessie</span>
+                }
+                </p>
                 <p>@(sessie.Naam)</p>
             </div>
             <div class="col-md-2">

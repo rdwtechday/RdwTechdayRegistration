@@ -153,17 +153,21 @@ namespace RdwTechdayRegistration.Controllers
                     .ThenInclude(atv => atv.Sessie)
                         .ThenInclude(t => t.Ruimte)
                 .Include(c => c.ApplicationUserTijdvakken)
+                    .ThenInclude(atv => atv.Sessie)
+                        .ThenInclude(t => t.SessieTijdvakken)
+                .Include(c => c.ApplicationUserTijdvakken)
                      .ThenInclude(t => t.Tijdvak)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
-            ViewBag.ApplicationUserTijdvakken = user.ApplicationUserTijdvakken.OrderBy(atv => atv.Tijdvak.Order);
+            SelectSessies model = new SelectSessies();
+            model.ApplicationUserTijdvakken = user.ApplicationUserTijdvakken.OrderBy(atv => atv.Tijdvak.Order).ToList();
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(model);
         }
 
         [HttpGet]
