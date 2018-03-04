@@ -21,7 +21,7 @@
                 @Html.DisplayNameFor(model => model.Track)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Tijdvak)
+                Tijd
             </th>
             <th></th>
         </tr>
@@ -39,7 +39,7 @@
                 @Html.DisplayFor(modelItem => item.Track.Naam)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Tijdvak.Start) - @Html.DisplayFor(modelItem => item.Tijdvak.Einde)
+                @item.TimeRange()
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

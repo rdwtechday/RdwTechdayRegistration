@@ -27,10 +27,10 @@
             @Html.DisplayFor(model => model.Ruimte.Naam)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Tijdvak)
+            Tijd
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Tijdvak.Start) - @Html.DisplayFor(model => model.Tijdvak.Einde)
+            @Model.TimeRange()
         </dd>
     </dl>
 </div>

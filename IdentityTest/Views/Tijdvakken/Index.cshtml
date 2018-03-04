@@ -5,15 +5,14 @@
     ViewData["Message"] = "Inzien en Bewerken";
 }
 
+<div class="alert alert-danger" role="alert">Wijzgen van tijdvakken betekent dat iedereen zich opnieuw moet inschrijven, dus alleen wijzigen als je echt weet wat je doet!!</div>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Serie)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Order)
             </th>
@@ -29,9 +28,6 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Serie)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Order)
             </td>

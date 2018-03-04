@@ -22,14 +22,6 @@ namespace RdwTechdayRegistration.Controllers
             ViewBag.TrackId = new SelectList(query.AsNoTracking(), "Id", "Naam", selectedTrack);
         }
 
-        private void PopulateTijdvakDropDownList(object selectedTijdvak = null)
-        {
-            var query = from d in _context.Tijdvakken
-                        orderby d.Order
-                        select d;
-            ViewBag.TijdvakId = new SelectList(query.AsNoTracking(), "Id", "Start", selectedTijdvak);
-        }
-
         private void PopulateRuimtesDropDownList(object selectedRuimte = null)
         {
             var query = from d in _context.Ruimtes
@@ -49,6 +41,7 @@ namespace RdwTechdayRegistration.Controllers
             List<Sessie> sessies = await _context.Sessies
                 .Include(c => c.Ruimte)
                 .Include(c => c.SessieTijdvakken)
+                    .ThenInclude(stv => stv.Tijdvak)
                 .Include(c => c.Track)
                 .ToListAsync();
             return View(sessies);
@@ -65,6 +58,7 @@ namespace RdwTechdayRegistration.Controllers
             var sessie = await _context.Sessies
                 .Include(c => c.Ruimte)
                 .Include(c => c.SessieTijdvakken)
+                    .ThenInclude(stv => stv.Tijdvak)
                 .Include(c => c.Track)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
@@ -80,7 +74,6 @@ namespace RdwTechdayRegistration.Controllers
         public IActionResult Create()
         {
             PopulateTracksDropDownList();
-            PopulateTijdvakDropDownList();
             PopulateRuimtesDropDownList();
             return View();
         }
@@ -90,7 +83,7 @@ namespace RdwTechdayRegistration.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Naam,TrackId,TijdvakId,RuimteId")] Sessie sessie)
+        public async Task<IActionResult> Create([Bind("Id,Naam,TrackId,RuimteId")] Sessie sessie)
         {
             if (ModelState.IsValid)
             {
@@ -115,6 +108,7 @@ namespace RdwTechdayRegistration.Controllers
             var sessie = await _context.Sessies
                 .Include(c => c.Ruimte)
                 .Include(c => c.SessieTijdvakken)
+                    .ThenInclude(stv => stv.Tijdvak)
                 .Include(c => c.Track)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (sessie == null)
@@ -122,7 +116,6 @@ namespace RdwTechdayRegistration.Controllers
                 return NotFound();
             }
             PopulateTracksDropDownList(sessie.TrackId);
-            //PopulateTijdvakDropDownList(sessie.TijdvakId);
             PopulateRuimtesDropDownList( sessie.RuimteId );
             return View(sessie);
         }
@@ -132,7 +125,7 @@ namespace RdwTechdayRegistration.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,TrackId,TijdvakId,RuimteId")] Sessie sessie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,TrackId,RuimteId")] Sessie sessie)
         {
             if (id != sessie.Id)
             {
@@ -160,7 +153,6 @@ namespace RdwTechdayRegistration.Controllers
                 return RedirectToAction(nameof(Index));
             }
             PopulateTracksDropDownList(sessie.TrackId);
-            //PopulateTijdvakDropDownList(sessie.TijdvakId);
             PopulateRuimtesDropDownList(sessie.RuimteId);
             return View(sessie);
         }
