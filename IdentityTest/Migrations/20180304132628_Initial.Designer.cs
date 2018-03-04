@@ -11,7 +11,7 @@ using System;
 namespace RdwTechdayRegistration.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180303192914_Initial")]
+    [Migration("20180304132628_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
