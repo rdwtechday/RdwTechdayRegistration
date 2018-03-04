@@ -20,20 +20,20 @@ namespace RdwTechdayRegistration.Services
 
         private IConfiguration _configuration;
 
-        public Task SendEmailAsync(string email, string subject, string message)
+        public Task SendEmailAsync(string email, string subject, string plainMessage, string htmlMessage)
         {
-            return Execute(_configuration["sendgridkey"], subject, message, email);
+            return Execute(_configuration["sendgridkey"], subject, plainMessage, htmlMessage, email);
         }
 
-        public Task Execute(string apiKey, string subject, string message, string email)
+        public Task Execute(string apiKey, string subject, string plainMessage, string htmlMessage, string email)
         {
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
                 From = new EmailAddress(_configuration["email:fromadress"], _configuration["email:fromname"]),
                 Subject = subject,
-                PlainTextContent = message,
-                HtmlContent = message
+                PlainTextContent = plainMessage,
+                HtmlContent = htmlMessage
             };
             msg.AddTo(new EmailAddress(email));
             return client.SendEmailAsync(msg);

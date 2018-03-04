@@ -35,5 +35,14 @@ namespace Microsoft.AspNetCore.Mvc
                 protocol: scheme);
         }
 
+        public static string LoginLink(this IUrlHelper urlHelper, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(AccountController.Login),
+                controller: "Account",
+                values: null,
+                protocol: scheme);
+        }
+
     }
 }

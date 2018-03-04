@@ -243,8 +243,18 @@ namespace RdwTechdayRegistration.Controllers
 
                     var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                     var callbackUrl = Url.RegisterNonRDWCallbackLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailAsync(model.Email, "Welkom bij de RDW Techday",
-                       $"Wij hebben een account voor u aangemaakt waarmee u zich kunt registreren voor sessies op de RDW Techday. Om toegang te krijgen, dient u een nieuw wachtwoord in te stellen via de volgende <a href='{callbackUrl}'>link</a>");
+                    var loginurl = Url.LoginLink(Request.Scheme);
+                    string htmlMessage = $"Beste {user.Name},<br/><br/>Wij hebben een account voor u aangemaakt waarmee u zich kunt registreren voor sessies op de RDW Techday. Om toegang te krijgen, dient u een nieuw wachtwoord in te stellen via de volgende <a href='{callbackUrl}'>link</a>." +
+                       $"<br/><br/>LET OP: Bovenstaande link werkt eenmalig. Indien u deze mail al heeft bevestigd, dan kan kan u <a href='{loginurl}'>hier inloggen</a>." +
+                       $"<br/><br/><br/>Met vriendelijke groet,<br/><br/>RDW Techday";
+
+                    string plainMessage = $"Beste {user.Name}" + Environment.NewLine + Environment.NewLine +
+                       $"Wij hebben een account voor u aangemaakt waarmee u zich kunt registreren voor sessies op de RDW Techday. Om toegang te krijgen, dient u een nieuw wachtwoord in te stellen via de volgende link: {callbackUrl}" + Environment.NewLine + Environment.NewLine +
+                       $"LET OP: Bovenstaande link werkt eenmalig. Indien u deze mail al heeft bevestigd, dan kan kan u hier inloggen: {loginurl}" + Environment.NewLine + Environment.NewLine + Environment.NewLine +
+                       $"Met vriendelijke groet," + Environment.NewLine + Environment.NewLine +
+                       $"RDW Techday";
+
+                    await _emailSender.SendEmailAsync(model.Email, "Welkom bij de RDW Techday", plainMessage, htmlMessage);
                     return Redirect(nameof(RegisterNonRdwConfirmation));
                 }
                 AddErrors(result);
@@ -340,7 +350,7 @@ namespace RdwTechdayRegistration.Controllers
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                    await _emailSender.SendEmailConfirmationAsync(user.Name, model.Email, callbackUrl);
 
                     _logger.LogInformation("User created a new account with password.");
                     return RedirectToAction(nameof(RegisterConfirmation));
@@ -495,8 +505,9 @@ namespace RdwTechdayRegistration.Controllers
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
-                await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+                string plainMessage = $"Please reset your password by clicking here: {callbackUrl}'";
+                string htmlMessage = $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>";
+                await _emailSender.SendEmailAsync(model.Email, "Reset Password", plainMessage, htmlMessage);
                 return RedirectToAction(nameof(ForgotPasswordConfirmation));
             }
 
@@ -573,7 +584,6 @@ namespace RdwTechdayRegistration.Controllers
         {
             return View();
         }
-
 
         [HttpGet]
         public IActionResult AccessDenied()
