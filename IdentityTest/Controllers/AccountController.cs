@@ -294,18 +294,19 @@ namespace RdwTechdayRegistration.Controllers
             {
                 // sign to prevent strange effects
                 var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-                if (result.Succeeded)
+                if (!result.Succeeded)
                 {
-                    // reset lockout
-                    await _userManager.SetLockoutEnabledAsync(user, false);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    await _userManager.ConfirmEmailAsync(user, code);
-                    var signingresult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: true);
-                    return Redirect(Url.Content("~/"));
+                    AddErrors(result);
+                    return View(model);
                 }
+                // reset lockout too
+                await _userManager.SetLockoutEnabledAsync(user, false);
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                await _userManager.ConfirmEmailAsync(user, code);
+                var signingresult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: true);
+                return Redirect(Url.Content("~/"));
             }
-            ModelState.AddModelError("Email", "Er zit een fout in de door u verstrekte gegevens. Is het e-mail adres dezelfde als waar u de u de link op ontvangen hebt?");
-            return View();
+            return View(model);
         }
 
         [HttpGet]
