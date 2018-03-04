@@ -84,6 +84,7 @@ namespace RdwTechdayRegistration.Data
                     throw new System.InvalidOperationException("Error creating standard admin user" + msg);
                 }
                 user = await _userManager.Users.SingleOrDefaultAsync<ApplicationUser>(u => u.Email == userid);
+                await _userManager.AddToRoleAsync(user, "User");
             }
             var roles = await _userManager.GetRolesAsync(user);
             if (!roles.Contains("Admin"))

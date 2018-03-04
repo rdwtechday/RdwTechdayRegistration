@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace RdwTechdayRegistration.Controllers
 
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "User")]
     public class UsersController : Controller
     {
         private readonly RdwTechdayRegistration.Data.ApplicationDbContext _context;
@@ -24,6 +24,8 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         // GET: Deelnemers
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             List<ApplicationUser> users = await _context.ApplicationUsers.ToListAsync();
@@ -36,6 +38,8 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         // GET: Deelnemers/Delete/5
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -55,6 +59,7 @@ namespace RdwTechdayRegistration.Controllers
 
         // POST: Deelnemers/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
@@ -65,6 +70,7 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddAdminRole(string id)
         {
             if (id == null)
@@ -83,6 +89,7 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpPost, ActionName("AddAdminRole")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAdminRoleConfirmed(string id)
         {
@@ -97,6 +104,7 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RevokeAdminRole(string id)
         {
             if (id == null)
@@ -115,6 +123,7 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpPost, ActionName("RevokeAdminRole")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RevokeAdminRoleConfirmed(string id)
         {
@@ -128,7 +137,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> SelectSessies()
         {
             string id = _userManager.GetUserId(User);
@@ -159,7 +167,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> EditSessionSelection(int? tijdvakid, int? sessieid)
         {
             string id = _userManager.GetUserId(User);
@@ -230,7 +237,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LeaveSession(EditSessionSelection model)
         {
@@ -273,7 +279,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditSessionSelection(EditSessionSelection model)
         {
@@ -305,7 +310,9 @@ namespace RdwTechdayRegistration.Controllers
             }
 
             // release tijdvakken for the current session (as we might be going from a 2 tijdvak session to a 1 tijdvak session, we need to make sure all tijdvakken are released)
-            ApplicationUserTijdvak currentautv = await _context.ApplicationUserTijdvakken.SingleOrDefaultAsync(t => t.TijdvakId == model.TijdvakId);
+            ApplicationUserTijdvak currentautv = await _context.ApplicationUserTijdvakken
+                .Where(t => t.ApplicationUserId == user.Id)
+                .SingleOrDefaultAsync(t => t.TijdvakId == model.TijdvakId);
             Sessie currentsessie = await _context.Sessies.SingleOrDefaultAsync(s => s.Id == currentautv.SessieId);
             if (currentsessie != null)
             {

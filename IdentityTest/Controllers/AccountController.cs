@@ -235,6 +235,7 @@ namespace RdwTechdayRegistration.Controllers
                 var result = await _userManager.CreateAsync(user, password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "User");
                     await user.AddTijdvakkenAsync(_context);
                     await _context.SaveChangesAsync();
 
@@ -331,6 +332,7 @@ namespace RdwTechdayRegistration.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "User");
                     await user.AddTijdvakkenAsync(_context);
                     await _context.SaveChangesAsync();
                     _logger.LogInformation("User created a new account with password.");

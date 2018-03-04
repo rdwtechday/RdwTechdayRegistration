@@ -10,7 +10,13 @@
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Tijdstip: @(atv.Tijdvak.Start) - @(atv.Tijdvak.Einde)</h3>
+            <h3 class="panel-title">
+            @if (atv.Sessie != null)
+            {
+                <span class="label label-primary label-sessieselect">Track: @(atv.Sessie.Track.Naam)</span> 
+            }
+            Tijdstip: @(atv.Tijdvak.Start) - @(atv.Tijdvak.Einde)
+            </h3>
         </div>
         <div class="panel-body">
             <div class="col-md-10">
@@ -20,7 +26,7 @@
                 }
                 else
                 {
-                    <text>@atv.Sessie.Naam [@atv.Sessie.Track.Naam]</text>
+                    <text>@atv.Sessie.Naam</text>
                 }
             </div>
             <div class="col-md-2">
