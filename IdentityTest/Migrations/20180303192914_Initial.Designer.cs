@@ -11,7 +11,7 @@ using System;
 namespace RdwTechdayRegistration.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180301210745_Initial")]
+    [Migration("20180303192914_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -186,17 +186,21 @@ namespace RdwTechdayRegistration.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.ApplicationUserSessie", b =>
+            modelBuilder.Entity("RdwTechdayRegistration.Models.ApplicationUserTijdvak", b =>
                 {
                     b.Property<string>("ApplicationUserId");
 
-                    b.Property<int>("SessieId");
+                    b.Property<int>("TijdvakId");
 
-                    b.HasKey("ApplicationUserId", "SessieId");
+                    b.Property<int?>("SessieId");
+
+                    b.HasKey("ApplicationUserId", "TijdvakId");
 
                     b.HasIndex("SessieId");
 
-                    b.ToTable("ApplicationUserSessie");
+                    b.HasIndex("TijdvakId");
+
+                    b.ToTable("ApplicationUserTijdvakken");
                 });
 
             modelBuilder.Entity("RdwTechdayRegistration.Models.Maxima", b =>
@@ -236,19 +240,28 @@ namespace RdwTechdayRegistration.Migrations
 
                     b.Property<int?>("RuimteId");
 
-                    b.Property<int?>("TijdvakId");
-
                     b.Property<int?>("TrackId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RuimteId");
 
-                    b.HasIndex("TijdvakId");
-
                     b.HasIndex("TrackId");
 
                     b.ToTable("Sessies");
+                });
+
+            modelBuilder.Entity("RdwTechdayRegistration.Models.SessieTijdvak", b =>
+                {
+                    b.Property<int>("SessieId");
+
+                    b.Property<int>("TijdvakId");
+
+                    b.HasKey("SessieId", "TijdvakId");
+
+                    b.HasIndex("TijdvakId");
+
+                    b.ToTable("SessieTijdvakken");
                 });
 
             modelBuilder.Entity("RdwTechdayRegistration.Models.Tijdvak", b =>
@@ -256,11 +269,13 @@ namespace RdwTechdayRegistration.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Einde");
+                    b.Property<string>("Einde")
+                        .IsRequired();
 
                     b.Property<int>("Order");
 
-                    b.Property<string>("Start");
+                    b.Property<string>("Start")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -339,16 +354,21 @@ namespace RdwTechdayRegistration.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("RdwTechdayRegistration.Models.ApplicationUserSessie", b =>
+            modelBuilder.Entity("RdwTechdayRegistration.Models.ApplicationUserTijdvak", b =>
                 {
                     b.HasOne("RdwTechdayRegistration.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("UserSessies")
+                        .WithMany("ApplicationUserTijdvakken")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("RdwTechdayRegistration.Models.Sessie", "Sessie")
-                        .WithMany("UserSessies")
+                        .WithMany("ApplicationUserTijdvakken")
                         .HasForeignKey("SessieId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("RdwTechdayRegistration.Models.Tijdvak", "Tijdvak")
+                        .WithMany("ApplicationUserTijdvakken")
+                        .HasForeignKey("TijdvakId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -359,15 +379,23 @@ namespace RdwTechdayRegistration.Migrations
                         .HasForeignKey("RuimteId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("RdwTechdayRegistration.Models.Tijdvak", "Tijdvak")
-                        .WithMany("Sessies")
-                        .HasForeignKey("TijdvakId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("RdwTechdayRegistration.Models.Track", "Track")
                         .WithMany("Sessies")
                         .HasForeignKey("TrackId")
                         .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("RdwTechdayRegistration.Models.SessieTijdvak", b =>
+                {
+                    b.HasOne("RdwTechdayRegistration.Models.Sessie", "Sessie")
+                        .WithMany("SessieTijdvakken")
+                        .HasForeignKey("SessieId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RdwTechdayRegistration.Models.Tijdvak", "Tijdvak")
+                        .WithMany("SessieTijdvakken")
+                        .HasForeignKey("TijdvakId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RdwTechdayRegistration.Models.TrackTijdvak", b =>
@@ -378,7 +406,7 @@ namespace RdwTechdayRegistration.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("RdwTechdayRegistration.Models.Track", "Track")
-                        .WithMany("Tijdvakken")
+                        .WithMany()
                         .HasForeignKey("TrackID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

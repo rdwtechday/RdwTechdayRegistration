@@ -7,9 +7,9 @@ namespace RdwTechdayRegistration.Models
     {
         public int Id { get; set; }
 
-
         [Display(Name = "Ruimte")]
         public string Naam { get; set; }
+
         public int Capacity { get; set; }
         public List<Sessie> Sessies { get; set; }
     }

@@ -163,3 +163,19 @@ body {
     border-right: 1px solid #fff;
     margin-right: 10px;
 }
+
+.btn-rdw {
+    color: #fff;
+    background-color: #c30;
+    border-color: #c30;
+}
+
+.btn.btn-rdw:hover {
+    color: #fff;
+    background-color: #b20;
+    border-color: #b20;
+}
+
+.label.label-sessieselect {
+    font-size: 100%;
+}

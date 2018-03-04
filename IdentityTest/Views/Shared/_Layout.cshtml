@@ -33,14 +33,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">&nbsp;</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand"><text class="hidden-xs">&nbsp;</text><text class="hidden-md hidden-lg">RDW Techday Registratie</text></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     @if (SignInManager.IsSignedIn(User))
                     {
-                        <li><a class="dropdown-item" asp-area="" asp-controller="Sessies" asp-action="Select">Sessies selecteren</a></li>
+                        <li><a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="SelectSessies">Sessies selecteren</a></li>
                     }
                     @if (User.IsInRole("Admin"))
                     {

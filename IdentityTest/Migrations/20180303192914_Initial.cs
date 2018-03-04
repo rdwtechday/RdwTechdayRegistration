@@ -84,9 +84,9 @@ namespace RdwTechdayRegistration.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Einde = table.Column<string>(nullable: true),
+                    Einde = table.Column<string>(nullable: false),
                     Order = table.Column<int>(nullable: false),
-                    Start = table.Column<string>(nullable: true)
+                    Start = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -221,7 +221,6 @@ namespace RdwTechdayRegistration.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Naam = table.Column<string>(nullable: true),
                     RuimteId = table.Column<int>(nullable: true),
-                    TijdvakId = table.Column<int>(nullable: true),
                     TrackId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -231,12 +230,6 @@ namespace RdwTechdayRegistration.Migrations
                         name: "FK_Sessies_Ruimtes_RuimteId",
                         column: x => x.RuimteId,
                         principalTable: "Ruimtes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Sessies_Tijdvakken_TijdvakId",
-                        column: x => x.TijdvakId,
-                        principalTable: "Tijdvakken",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
@@ -272,33 +265,69 @@ namespace RdwTechdayRegistration.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApplicationUserSessie",
+                name: "ApplicationUserTijdvakken",
                 columns: table => new
                 {
                     ApplicationUserId = table.Column<string>(nullable: false),
-                    SessieId = table.Column<int>(nullable: false)
+                    TijdvakId = table.Column<int>(nullable: false),
+                    SessieId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUserSessie", x => new { x.ApplicationUserId, x.SessieId });
+                    table.PrimaryKey("PK_ApplicationUserTijdvakken", x => new { x.ApplicationUserId, x.TijdvakId });
                     table.ForeignKey(
-                        name: "FK_ApplicationUserSessie_AspNetUsers_ApplicationUserId",
+                        name: "FK_ApplicationUserTijdvakken_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ApplicationUserSessie_Sessies_SessieId",
+                        name: "FK_ApplicationUserTijdvakken_Sessies_SessieId",
                         column: x => x.SessieId,
                         principalTable: "Sessies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserTijdvakken_Tijdvakken_TijdvakId",
+                        column: x => x.TijdvakId,
+                        principalTable: "Tijdvakken",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SessieTijdvakken",
+                columns: table => new
+                {
+                    SessieId = table.Column<int>(nullable: false),
+                    TijdvakId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SessieTijdvakken", x => new { x.SessieId, x.TijdvakId });
+                    table.ForeignKey(
+                        name: "FK_SessieTijdvakken_Sessies_SessieId",
+                        column: x => x.SessieId,
+                        principalTable: "Sessies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SessieTijdvakken_Tijdvakken_TijdvakId",
+                        column: x => x.TijdvakId,
+                        principalTable: "Tijdvakken",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserSessie_SessieId",
-                table: "ApplicationUserSessie",
+                name: "IX_ApplicationUserTijdvakken_SessieId",
+                table: "ApplicationUserTijdvakken",
                 column: "SessieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserTijdvakken_TijdvakId",
+                table: "ApplicationUserTijdvakken",
+                column: "TijdvakId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -345,14 +374,14 @@ namespace RdwTechdayRegistration.Migrations
                 column: "RuimteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sessies_TijdvakId",
-                table: "Sessies",
-                column: "TijdvakId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Sessies_TrackId",
                 table: "Sessies",
                 column: "TrackId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SessieTijdvakken_TijdvakId",
+                table: "SessieTijdvakken",
+                column: "TijdvakId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TrackTijdvakken_TijdvakID",
@@ -363,7 +392,7 @@ namespace RdwTechdayRegistration.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApplicationUserSessie");
+                name: "ApplicationUserTijdvakken");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -384,10 +413,10 @@ namespace RdwTechdayRegistration.Migrations
                 name: "Maxima");
 
             migrationBuilder.DropTable(
-                name: "TrackTijdvakken");
+                name: "SessieTijdvakken");
 
             migrationBuilder.DropTable(
-                name: "Sessies");
+                name: "TrackTijdvakken");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -396,10 +425,13 @@ namespace RdwTechdayRegistration.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Ruimtes");
+                name: "Sessies");
 
             migrationBuilder.DropTable(
                 name: "Tijdvakken");
+
+            migrationBuilder.DropTable(
+                name: "Ruimtes");
 
             migrationBuilder.DropTable(
                 name: "Tracks");

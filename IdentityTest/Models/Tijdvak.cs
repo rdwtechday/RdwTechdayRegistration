@@ -7,10 +7,13 @@ namespace RdwTechdayRegistration.Models
     {
         public int Id { get; set; }
         [Display(Name = "Volgorde")]
+        [Required]
         public int Order { get; set; }
+        [Required]
         public string Start { get; set; }
+        [Required]
         public string Einde { get; set; }
-        public List<Sessie> Sessies { get; set; }
-
+        public List<SessieTijdvak> SessieTijdvakken { get; set; }
+        public List<ApplicationUserTijdvak> ApplicationUserTijdvakken { get; set; }
     }
 }

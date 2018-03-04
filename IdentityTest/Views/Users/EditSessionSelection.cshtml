@@ -1,0 +1,39 @@
+﻿@model RdwTechdayRegistration.Models.UserViewModels.EditSessionSelection
+
+@{
+    ViewData["Title"] = "Sessies selecteren";
+    ViewData["Message"] = "Aan welke sessies wil u deelnemen?";
+}
+
+@foreach (var sessie in Model.Sessies) {
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-md-10">
+                <p><span class="label label-primary label-sessieselect">Track: @(sessie.Track.Naam)</span> @(sessie.TimeRange())</p>
+                <p>@(sessie.Naam)</p>
+            </div>
+            <div class="col-md-2">
+                @if (sessie.Id == Model.CurrentSessionId )
+                {
+                    <form asp-action="LeaveSession">
+                        <input type="hidden" asp-for="TijdvakId" />
+                        <input type="hidden" asp-for="SelectedSessieId" value="@(sessie.Id)" />
+                        <input type="submit" value="Uitschrijven" class="btn btn-default" />
+                    </form>
+                }
+                else
+                {
+                    <form asp-action="EditSessionSelection">
+                        <input type="hidden" asp-for="TijdvakId" />
+                        <input type="hidden" asp-for="SelectedSessieId" value="@(sessie.Id)" />
+                        <input type="submit" value="Inschrijven" class="btn btn-rdw" />
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+}
+<a asp-action="SelectSessies">Terug</a>
+

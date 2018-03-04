@@ -1,0 +1,35 @@
+﻿@model RdwTechdayRegistration.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Sessies selecteren";
+    ViewData["Message"] = "Aan welke sessies wil u deelnemen?";
+}
+
+@foreach (var atv in ViewBag.ApplicationUserTijdvakken)
+{
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Tijdstip: @(atv.Tijdvak.Start) - @(atv.Tijdvak.Einde)</h3>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-10">
+                @if (atv.Sessie == null)
+                {
+                    <text>Geen sessie</text>
+                }
+                else
+                {
+                    <text>@atv.Sessie.Naam [@atv.Sessie.Track.Naam]</text>
+                }
+            </div>
+            <div class="col-md-2">
+                <a asp-action="EditSessionSelection" asp-route-tijdvakid="@atv.Tijdvak.Id" asp-route-sessieid="@(atv.Sessie == null ? -1 : atv.Sessie.Id)" class="btn btn-rdw">
+                 @(atv.Sessie == null ? "Sessie Selecteren" : "Sessie aanpassen")
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+}
+

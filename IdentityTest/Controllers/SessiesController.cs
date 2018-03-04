@@ -48,7 +48,7 @@ namespace RdwTechdayRegistration.Controllers
         {
             List<Sessie> sessies = await _context.Sessies
                 .Include(c => c.Ruimte)
-                .Include(c => c.Tijdvak)
+                .Include(c => c.SessieTijdvakken)
                 .Include(c => c.Track)
                 .ToListAsync();
             return View(sessies);
@@ -64,7 +64,7 @@ namespace RdwTechdayRegistration.Controllers
 
             var sessie = await _context.Sessies
                 .Include(c => c.Ruimte)
-                .Include(c => c.Tijdvak)
+                .Include(c => c.SessieTijdvakken)
                 .Include(c => c.Track)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
@@ -99,7 +99,7 @@ namespace RdwTechdayRegistration.Controllers
                 return RedirectToAction(nameof(Index));
             }
             PopulateTracksDropDownList(sessie.TrackId);
-            PopulateTijdvakDropDownList(sessie.TijdvakId);
+            //PopulateTijdvakDropDownList(sessie.TijdvakId);
             PopulateRuimtesDropDownList(sessie.RuimteId);
             return View(sessie);
         }
@@ -114,7 +114,7 @@ namespace RdwTechdayRegistration.Controllers
 
             var sessie = await _context.Sessies
                 .Include(c => c.Ruimte)
-                .Include(c => c.Tijdvak)
+                .Include(c => c.SessieTijdvakken)
                 .Include(c => c.Track)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (sessie == null)
@@ -122,7 +122,7 @@ namespace RdwTechdayRegistration.Controllers
                 return NotFound();
             }
             PopulateTracksDropDownList(sessie.TrackId);
-            PopulateTijdvakDropDownList(sessie.TijdvakId);
+            //PopulateTijdvakDropDownList(sessie.TijdvakId);
             PopulateRuimtesDropDownList( sessie.RuimteId );
             return View(sessie);
         }
@@ -160,7 +160,7 @@ namespace RdwTechdayRegistration.Controllers
                 return RedirectToAction(nameof(Index));
             }
             PopulateTracksDropDownList(sessie.TrackId);
-            PopulateTijdvakDropDownList(sessie.TijdvakId);
+            //PopulateTijdvakDropDownList(sessie.TijdvakId);
             PopulateRuimtesDropDownList(sessie.RuimteId);
             return View(sessie);
         }

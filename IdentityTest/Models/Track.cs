@@ -16,6 +16,7 @@ namespace RdwTechdayRegistration.Models
         public string Rgb { get; set; }
 
         public List<Sessie> Sessies { get; set; }
-        public List<TrackTijdvak> Tijdvakken { get; set; }
+        //public List<ApplicationUserTijdvak> ApplicationUserTijdvakken { get; set; }
+        //public List<TrackTijdvak> Tijdvakken { get; set; }
     }
 }

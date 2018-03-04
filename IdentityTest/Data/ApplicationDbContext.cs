@@ -31,10 +31,9 @@ namespace RdwTechdayRegistration.Data
                 .OnDelete(DeleteBehavior.SetNull);
 
             builder.Entity<Sessie>()
-                .HasOne(s => s.Tijdvak)
-                .WithMany(r => r.Sessies)
+                .HasMany(s => s.ApplicationUserTijdvakken)
+                .WithOne(r => r.Sessie)
                 .OnDelete(DeleteBehavior.SetNull);
-
 
             builder.Entity<Ruimte>()
                 .ToTable("Ruimtes");
@@ -45,34 +44,49 @@ namespace RdwTechdayRegistration.Data
             builder.Entity<Maxima>()
                 .ToTable("Maxima");
 
-            builder.Entity<TrackTijdvak>()
-                .ToTable("TrackTijdvakken");
+            builder.Entity<ApplicationUserTijdvak>()
+                .ToTable("ApplicationUserTijdvakken")
+                .HasKey(c => new { c.ApplicationUserId, c.TijdvakId });
 
-            builder.Entity<ApplicationUserSessie>()
-               .HasKey(bc => new { bc.ApplicationUserId, bc.SessieId });
-
-            builder.Entity<ApplicationUserSessie>()
+            builder.Entity<ApplicationUserTijdvak>()
                 .HasOne(bc => bc.ApplicationUser)
-                .WithMany(b => b.UserSessies)
+                .WithMany(bc => bc.ApplicationUserTijdvakken)
                 .HasForeignKey(bc => bc.ApplicationUserId);
 
-            builder.Entity<ApplicationUserSessie>()
+            builder.Entity<ApplicationUserTijdvak>()
+                .HasOne(bc => bc.Tijdvak)
+                .WithMany(c => c.ApplicationUserTijdvakken)
+                .HasForeignKey(bc => bc.TijdvakId);
+
+            builder.Entity<SessieTijdvak>()
+                .ToTable("SessieTijdvakken")
+                .HasKey(c => new { c.SessieId, c.TijdvakId });
+
+            builder.Entity<SessieTijdvak>()
                 .HasOne(bc => bc.Sessie)
-                .WithMany(c => c.UserSessies)
+                .WithMany(c => c.SessieTijdvakken)
                 .HasForeignKey(bc => bc.SessieId);
+
+            builder.Entity<SessieTijdvak>()
+                .HasOne(bc => bc.Tijdvak)
+                .WithMany(c => c.SessieTijdvakken)
+                .HasForeignKey(bc => bc.TijdvakId);
+
+            builder.Entity<TrackTijdvak>()
+                .ToTable("TrackTijdvakken");
 
             builder.Entity<TrackTijdvak>()
                 .HasKey(c => new { c.TrackID, c.TijdvakID });
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<ApplicationUserTijdvak> ApplicationUserTijdvakken { get; set; }
         public DbSet<Sessie> Sessies { get; set; }
         public DbSet<Ruimte> Ruimtes { get; set; }
         public DbSet<Tijdvak> Tijdvakken { get; set; }
         public DbSet<Track> Tracks { get; set; }
-        public DbSet<TrackTijdvak> TrackTijdvakken { get; set; }
         public DbSet<Maxima> Maxima { get; set; }
-
+        public DbSet<SessieTijdvak> SessieTijdvakken { get; set; }
         public DbSet<IdentityRole> IdentityRoles { get; set; }
     }
 }
