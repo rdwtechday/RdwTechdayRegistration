@@ -211,7 +211,8 @@ namespace RdwTechdayRegistration.Controllers
             // construct a list of tijdvakken that have been taken by previous selections of this user
             foreach (var utv in user.ApplicationUserTijdvakken)
             {
-                // ignore tijdvak without a sessie and the current tijdvak as we ar replacing the session value with something new
+                // ignore tijdvak without a sessie, the current tijdvak and the tijdvakken taken by the current session
+                // as we ar replacing the session value with something new
                 if (utv.Sessie != null && utv.TijdvakId != tijdvakid && utv.SessieId != sessieid)
                 {
                     userTakenTijdvakken.Add(utv.Tijdvak);
