@@ -12,6 +12,12 @@ namespace RdwTechdayRegistration.Controllers
             return View();
         }
 
+        public  IActionResult Privacy()
+        {
+            ViewData["Message"] = "";
+            return View();
+        }
+
         public IActionResult Contact()
         {
             ViewData["Message"] = "";
