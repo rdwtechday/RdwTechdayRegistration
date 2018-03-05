@@ -20,7 +20,9 @@ namespace RdwTechdayRegistration.Controllers
         // GET: Tracks
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Tracks.ToListAsync());
+            return View(await _context.Tracks
+                .OrderBy(t => t.Naam)
+                .ToListAsync());
         }
 
         // GET: Tracks/Details/5

@@ -21,7 +21,9 @@ namespace RdwTechdayRegistration.Controllers
         // GET: Tijdvakken
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Tijdvakken.ToListAsync());
+            return View(await _context.Tijdvakken
+                .OrderBy(t => t.Order)
+                .ToListAsync());
         }
 
         // GET: Tijdvakken/Details/5

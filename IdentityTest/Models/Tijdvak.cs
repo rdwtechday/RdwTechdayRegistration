@@ -15,5 +15,18 @@ namespace RdwTechdayRegistration.Models
         public string Einde { get; set; }
         public List<SessieTijdvak> SessieTijdvakken { get; set; }
         public List<ApplicationUserTijdvak> ApplicationUserTijdvakken { get; set; }
+
+        public string TimeRange()
+        {
+            if (Start != null && Einde != null)
+            {
+                return Start + " - " + Einde;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
     }
 }

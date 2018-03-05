@@ -28,7 +28,9 @@ namespace RdwTechdayRegistration.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            List<ApplicationUser> users = await _context.ApplicationUsers.ToListAsync();
+            List<ApplicationUser> users = await _context.ApplicationUsers
+                .OrderBy(u => u.Name)
+                .ToListAsync();
             // brute force, maybe refactor if too slow
             foreach (ApplicationUser user in users)
             {
@@ -199,6 +201,7 @@ namespace RdwTechdayRegistration.Controllers
                 .Include(s => s.Sessie)
                     .ThenInclude(t => t.SessieTijdvakken)
                 .Include(t => t.Tijdvak)
+                .OrderBy(t => t.Sessie.Track.Naam)
                 .ToListAsync();
 
             // next we construct a list of sessies that can be selected bij the user

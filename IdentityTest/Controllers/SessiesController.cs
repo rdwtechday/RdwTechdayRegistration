@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using RdwTechdayRegistration.Models.SessieViewModels;
 
 namespace RdwTechdayRegistration.Controllers
 {
@@ -43,6 +44,7 @@ namespace RdwTechdayRegistration.Controllers
                 .Include(c => c.SessieTijdvakken)
                     .ThenInclude(stv => stv.Tijdvak)
                 .Include(c => c.Track)
+                .OrderBy(s => s.Naam)
                 .ToListAsync();
             return View(sessies);
         }
@@ -117,15 +119,54 @@ namespace RdwTechdayRegistration.Controllers
             }
             PopulateTracksDropDownList(sessie.TrackId);
             PopulateRuimtesDropDownList( sessie.RuimteId );
+            PopulateSessieTijdvakData(sessie);
             return View(sessie);
         }
+
+
+        private void PopulateSessieTijdvakData(Sessie sessie)
+        {
+            var tijdvakken = _context.Tijdvakken.OrderBy(t => t.Order);
+
+            var sessieTijdvakken = new HashSet<int>(sessie.SessieTijdvakken.Select(c => c.TijdvakId));
+            var viewModel = new List<SessieTijdvakData>();
+            foreach (var tv in tijdvakken)
+            {
+                viewModel.Add(new SessieTijdvakData
+                {
+                    TijdvakId = tv.Id,
+                    Title = tv.TimeRange(),
+                    Assigned = sessieTijdvakken.Contains(tv.Id)
+                });
+            }
+            ViewData["Tijdvakken"] = viewModel;
+        }
+
+        private void PopulateSessieTijdvakData(Sessie sessie, string[] selectedTijdvakken)
+        {
+            var tijdvakken = _context.Tijdvakken.OrderBy(t => t.Order);
+
+            var selectedTijdvakkenHS = new HashSet<string>(selectedTijdvakken);
+            var viewModel = new List<SessieTijdvakData>();
+            foreach (var tv in tijdvakken)
+            {
+                viewModel.Add(new SessieTijdvakData
+                {
+                    TijdvakId = tv.Id,
+                    Title = tv.TimeRange(),
+                    Assigned = selectedTijdvakkenHS.Contains(tv.Id.ToString())
+                });
+            }
+            ViewData["Tijdvakken"] = viewModel;
+        }
+
 
         // POST: Sessies/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,TrackId,RuimteId")] Sessie sessie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,TrackId,RuimteId")] Sessie sessie, string[] selectedTijdvakken )
         {
             if (id != sessie.Id)
             {
@@ -136,7 +177,18 @@ namespace RdwTechdayRegistration.Controllers
             {
                 try
                 {
-                    _context.Update(sessie);
+                    Sessie updatedSessie = await _context.Sessies
+                        .Include(s => s.SessieTijdvakken)
+                            .ThenInclude(s => s.Tijdvak)
+                        .SingleOrDefaultAsync(s => s.Id == id);
+
+                    updatedSessie.Naam = sessie.Naam;
+                    updatedSessie.RuimteId = sessie.RuimteId;
+                    updatedSessie.TrackId = sessie.TrackId;
+
+                    UpdateSessieTijdvakken(selectedTijdvakken, updatedSessie);
+
+                    _context.Update(updatedSessie);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -152,13 +204,44 @@ namespace RdwTechdayRegistration.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            PopulateSessieTijdvakData(sessie, selectedTijdvakken);
             PopulateTracksDropDownList(sessie.TrackId);
             PopulateRuimtesDropDownList(sessie.RuimteId);
             return View(sessie);
         }
 
-        // GET: Sessies/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        private void UpdateSessieTijdvakken(string[] selectedTijdvakken, Sessie sessie)
+        {
+            if (selectedTijdvakken == null)
+            {
+                sessie.SessieTijdvakken = new List<SessieTijdvak>();
+                return;
+            }
+
+            var selectedTijdvakkenHS = new HashSet<string>(selectedTijdvakken);
+            var sessieTijdvakken = new HashSet<int>(sessie.SessieTijdvakken.Select(c => c.Tijdvak.Id));
+            foreach (var tijdvak in _context.Tijdvakken)
+            {
+                if (selectedTijdvakkenHS.Contains(tijdvak.Id.ToString()))
+                {
+                    if (!sessieTijdvakken.Contains(tijdvak.Id))
+                    {
+                        sessie.SessieTijdvakken.Add(new SessieTijdvak { SessieId = sessie.Id, TijdvakId= tijdvak.Id});
+                    }
+                }
+                else
+                {
+                    if (sessieTijdvakken.Contains(tijdvak.Id))
+                    {
+                        SessieTijdvak verwijderSessieTijdvak = sessie.SessieTijdvakken.SingleOrDefault(i => i.TijdvakId == tijdvak.Id);
+                        _context.Remove(verwijderSessieTijdvak);
+                    }
+                }
+            }
+        }
+
+            // GET: Sessies/Delete/5
+            public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {

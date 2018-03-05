@@ -21,7 +21,9 @@ namespace RdwTechdayRegistration.Controllers
         // GET: Ruimtes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Ruimtes.ToListAsync());
+            return View(await _context.Ruimtes
+                .OrderBy(r => r.Naam)
+                .ToListAsync());
         }
 
         // GET: Ruimtes/Details/5
