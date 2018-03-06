@@ -229,6 +229,7 @@ namespace RdwTechdayRegistration.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, Organisation = model.Organisation };
+                user.isRDW = false;
 
                 var password = "RTD-1" + Guid.NewGuid().ToString("d").Substring(1, 15);
 
@@ -340,6 +341,7 @@ namespace RdwTechdayRegistration.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, Organisation = "RDW" };
+                user.isRDW = true;
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

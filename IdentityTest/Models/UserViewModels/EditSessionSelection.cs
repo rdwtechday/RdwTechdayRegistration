@@ -11,5 +11,8 @@ namespace RdwTechdayRegistration.Models.UserViewModels
         public int? TijdvakId { get; set; }
         public int SelectedSessieId { get; set; }
         public int CurrentSessionId { get; set; }
+
+        public Dictionary<int, int> UserCounts { get; set; }
+
     }
 }

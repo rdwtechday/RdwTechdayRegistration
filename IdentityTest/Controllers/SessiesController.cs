@@ -1,13 +1,12 @@
-﻿using RdwTechdayRegistration.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using RdwTechdayRegistration.Models;
+using RdwTechdayRegistration.Models.SessieViewModels;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using RdwTechdayRegistration.Models.SessieViewModels;
-using System.Data.Common;
 
 namespace RdwTechdayRegistration.Controllers
 {
@@ -18,9 +17,9 @@ namespace RdwTechdayRegistration.Controllers
 
         private void PopulateTracksDropDownList(object selectedTrack = null)
         {
-            var query = from d in _context.Tracks    
-                                   orderby d.Naam
-                                   select d;
+            var query = from d in _context.Tracks
+                        orderby d.Naam
+                        select d;
             ViewBag.TrackId = new SelectList(query.AsNoTracking(), "Id", "Naam", selectedTrack);
         }
 
@@ -49,33 +48,7 @@ namespace RdwTechdayRegistration.Controllers
                 .OrderBy(s => s.Naam)
                 .ToListAsync();
 
-            var counts = new Dictionary<int,string>();
-            var conn = _context.Database.GetDbConnection();
-            try
-            {
-                await conn.OpenAsync();
-                using (var command = conn.CreateCommand())
-                {
-                    string query = "SELECT SessieId, count(ApplicationUserId)  from dbo.ApplicationUserTijdvakken WHERE SessieId IS NOT NULL GROUP BY SessieId, ApplicationUserId";
-                    command.CommandText = query;
-                    DbDataReader reader = await command.ExecuteReaderAsync();
-
-                    if (reader.HasRows)
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            counts.Add(reader.GetInt32(0), reader.GetInt32(1).ToString());
-                        }
-                    }
-                    reader.Dispose();
-
-                }
-            }
-            finally
-            {
-                conn.Close();
-            }
-            ViewBag.UserCounts = counts;
+            ViewBag.UserCounts = await Sessie.GetUserCountsAsync(_context);
 
             return View(sessies);
         }
@@ -149,11 +122,10 @@ namespace RdwTechdayRegistration.Controllers
                 return NotFound();
             }
             PopulateTracksDropDownList(sessie.TrackId);
-            PopulateRuimtesDropDownList( sessie.RuimteId );
+            PopulateRuimtesDropDownList(sessie.RuimteId);
             PopulateSessieTijdvakData(sessie);
             return View(sessie);
         }
-
 
         private void PopulateSessieTijdvakData(Sessie sessie)
         {
@@ -191,13 +163,12 @@ namespace RdwTechdayRegistration.Controllers
             ViewData["Tijdvakken"] = viewModel;
         }
 
-
         // POST: Sessies/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,TrackId,RuimteId")] Sessie sessie, string[] selectedTijdvakken )
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,TrackId,RuimteId")] Sessie sessie, string[] selectedTijdvakken)
         {
             if (id != sessie.Id)
             {
@@ -257,7 +228,7 @@ namespace RdwTechdayRegistration.Controllers
                 {
                     if (!sessieTijdvakken.Contains(tijdvak.Id))
                     {
-                        sessie.SessieTijdvakken.Add(new SessieTijdvak { SessieId = sessie.Id, TijdvakId= tijdvak.Id});
+                        sessie.SessieTijdvakken.Add(new SessieTijdvak { SessieId = sessie.Id, TijdvakId = tijdvak.Id });
                     }
                 }
                 else
@@ -271,8 +242,8 @@ namespace RdwTechdayRegistration.Controllers
             }
         }
 
-            // GET: Sessies/Delete/5
-            public async Task<IActionResult> Delete(int? id)
+        // GET: Sessies/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {

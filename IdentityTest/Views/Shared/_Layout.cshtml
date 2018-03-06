@@ -38,7 +38,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    @if (SignInManager.IsSignedIn(User))
+                    @if (SignInManager.IsSignedIn(User) )
                     {
                         <li><a class="dropdown-item" asp-area="" asp-controller="Users" asp-action="SelectSessies">Sessies selecteren</a></li>
                     }

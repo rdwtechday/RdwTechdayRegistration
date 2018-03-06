@@ -2,13 +2,29 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using RdwTechdayRegistration.Data;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace RdwTechdayRegistration.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+
+
+        public HomeController(ApplicationDbContext context)
         {
+            _context = context;
+        }
+
+
+        public async Task<IActionResult> Index()
+        {
+            int rdwUserCount = await ApplicationUser.RdwuserCountAsync(_context);
+            Maxima maxima = await _context.Maxima.SingleOrDefaultAsync();
+
+            ViewBag.ShowRegistreer = rdwUserCount < maxima.MaxRDW;
             return View();
         }
 

@@ -104,13 +104,22 @@ namespace RdwTechdayRegistration.Data
             await _context.SaveChangesAsync();
 
             var ruimtes = new List<Ruimte>();
-            ruimtes.Add(new Ruimte { Naam = "Groningen", Capacity = 70 });
-            ruimtes.Add(new Ruimte { Naam = "Amsterdam", Capacity = 70 });
-            ruimtes.Add(new Ruimte { Naam = "Rotterdam", Capacity = 70 });
-            ruimtes.Add(new Ruimte { Naam = "Utrecht", Capacity = 70 });
-            ruimtes.Add(new Ruimte { Naam = "Nijmegen", Capacity = 22 });
-            ruimtes.Add(new Ruimte { Naam = "Leiden", Capacity = 22 });
-            ruimtes.Add(new Ruimte { Naam = "Delft", Capacity = 22 });
+            var room250 = new Ruimte { Naam = "Grote zaal", Capacity = 250 };
+            ruimtes.Add(room250);
+            var roomGrn = new Ruimte { Naam = "Groningen", Capacity = 70 };
+            ruimtes.Add(roomGrn);
+            var roomAms = new Ruimte { Naam = "Amsterdam", Capacity = 70 };
+            ruimtes.Add(roomAms);
+            var roomRdm = new Ruimte { Naam = "Rotterdam", Capacity = 70 };
+            ruimtes.Add(roomRdm);
+            var roomUtr = new Ruimte { Naam = "Utrecht", Capacity = 70 };
+            ruimtes.Add(roomUtr);
+            var roomNij = new Ruimte { Naam = "Nijmegen", Capacity = 22 };
+            ruimtes.Add(roomNij);
+            var roomLei = new Ruimte { Naam = "Leiden", Capacity = 22 };
+            ruimtes.Add(roomLei);
+            var roomDel = new Ruimte { Naam = "Delft", Capacity = 22 };
+            ruimtes.Add(roomDel);
             _context.Ruimtes.AddRange(ruimtes);
 
             var faker = new Faker("nl");
@@ -121,69 +130,69 @@ namespace RdwTechdayRegistration.Data
 
             var track0 = new Track { Naam = "Keynote", Rgb = "B9CA8A" };
             tracks.Add(track0);
-            var sessie = new Sessie { Naam = "Een mooie keynote lezing", Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track0 }; sessies.Add(sessie);
+            var sessie = new Sessie { Naam = "Een mooie keynote lezing", Ruimte = room250, Track = track0 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv0 });
 
 
             var track1 = new Track { Naam = "Infra", Rgb = "FFC548" }; tracks.Add(track1);
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track1 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomGrn, Track = track1 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv1 } );
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track1 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomGrn, Track = track1 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv2 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track1 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomGrn, Track = track1 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv3 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track1 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomGrn, Track = track1 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv4 });
 
             var track2 = new Track { Naam = "Apps", Rgb = "B0A0C5" }; tracks.Add(track2);
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track2 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomAms, Track = track2 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie= sessie, Tijdvak = tv1 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track2 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomAms, Track = track2 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv2 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track2 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomAms, Track = track2 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv3 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track2 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomAms, Track = track2 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv4 });
 
             var track3 = new Track { Naam = "Collaboratie", Rgb = "9CD2E0" }; tracks.Add(track3);
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track3 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomRdm, Track = track3 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv1 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track3 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomRdm, Track = track3 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv2 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track3 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomRdm, Track = track3 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv3 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track3 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomRdm, Track = track3 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv4 });
 
             var track4 = new Track { Naam = "Inspiratie", Rgb = "FFAC59" }; tracks.Add(track4);
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track4 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomUtr, Track = track4 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv1 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track4 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomUtr, Track = track4 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv2 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track4 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomUtr, Track = track4 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv3 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track4 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomUtr, Track = track4 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv4 });
 
             var track5 = new Track { Naam = "Workshops I", Rgb = "D99690" }; tracks.Add(track5);
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track5 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomLei, Track = track5 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv1 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track5 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomLei, Track = track5 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv2 });
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv3 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track5 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomLei, Track = track5 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv4 });
 
             var track6 = new Track { Naam = "Workshops II", Rgb = "D99690" }; tracks.Add(track6);
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track6 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomDel, Track = track6 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv1 });
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv2 });
-            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track6 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = faker.Lorem.Sentence(7), Ruimte = roomDel, Track = track6 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv3 });
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv4 });
 
             var track7 = new Track { Naam = "Closing Note", Rgb = "B9CA8A" }; tracks.Add(track7);
-            sessie = new Sessie { Naam = "Een mooie closing note lezing", Ruimte = faker.PickRandom<Ruimte>(ruimtes), Track = track7 }; sessies.Add(sessie);
+            sessie = new Sessie { Naam = "Een mooie closing note lezing", Ruimte = room250, Track = track7 }; sessies.Add(sessie);
             sessie.SessieTijdvakken.Add(new SessieTijdvak { Sessie = sessie, Tijdvak = tv5 });
 
             _context.Tracks.AddRange(tracks);

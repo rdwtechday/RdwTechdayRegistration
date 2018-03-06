@@ -199,6 +199,8 @@ namespace RdwTechdayRegistration.Controllers
                 .Include(s => s.Sessie)
                     .ThenInclude(t => t.Track)
                 .Include(s => s.Sessie)
+                    .ThenInclude(t => t.Ruimte)
+                .Include(s => s.Sessie)
                     .ThenInclude(t => t.SessieTijdvakken)
                 .Include(t => t.Tijdvak)
                 .OrderBy(t => t.Sessie.Track.Naam)
@@ -241,6 +243,8 @@ namespace RdwTechdayRegistration.Controllers
             }
 
             EditSessionSelection model = new EditSessionSelection { Sessies = availableSessies, TijdvakId = tijdvakid, CurrentSessionId = (int) sessieid };
+            model.UserCounts = await Sessie.GetUserCountsAsync(_context);
+
             return View(model);
         }
 
@@ -310,6 +314,7 @@ namespace RdwTechdayRegistration.Controllers
 
             Sessie sessie = await _context.Sessies
                 .Include(s => s.SessieTijdvakken)
+                .Include(s => s.Ruimte)
                 .SingleOrDefaultAsync(s => s.Id == model.SelectedSessieId);
 
             if (sessie == null)
@@ -317,34 +322,38 @@ namespace RdwTechdayRegistration.Controllers
                 return NotFound();
             }
 
-            // release tijdvakken for the current session (as we might be going from a 2 tijdvak session to a 1 tijdvak session, we need to make sure all tijdvakken are released)
-            ApplicationUserTijdvak currentautv = await _context.ApplicationUserTijdvakken
-                .Where(t => t.ApplicationUserId == user.Id)
-                .SingleOrDefaultAsync(t => t.TijdvakId == model.TijdvakId);
-            Sessie currentsessie = await _context.Sessies.SingleOrDefaultAsync(s => s.Id == currentautv.SessieId);
-            if (currentsessie != null)
+            int usercount = await sessie.GetUserCountAsync(_context);
+            if (usercount < sessie.Ruimte.Capacity)
             {
-                foreach (ApplicationUserTijdvak autv in user.ApplicationUserTijdvakken)
+                // release tijdvakken for the current session (as we might be going from a 2 tijdvak session to a 1 tijdvak session, we need to make sure all tijdvakken are released)
+                ApplicationUserTijdvak currentautv = await _context.ApplicationUserTijdvakken
+                    .Where(t => t.ApplicationUserId == user.Id)
+                    .SingleOrDefaultAsync(t => t.TijdvakId == model.TijdvakId);
+                Sessie currentsessie = await _context.Sessies.SingleOrDefaultAsync(s => s.Id == currentautv.SessieId);
+                if (currentsessie != null)
                 {
-                    if ( autv.SessieId == currentsessie.Id)
+                    foreach (ApplicationUserTijdvak autv in user.ApplicationUserTijdvakken)
                     {
-                        autv.SessieId = null;
+                        if (autv.SessieId == currentsessie.Id)
+                        {
+                            autv.SessieId = null;
+                        }
                     }
                 }
-            }
 
-            // reserve tijdvakken for the selected session
-            foreach (SessieTijdvak stv in sessie.SessieTijdvakken)
-            {
-                foreach (ApplicationUserTijdvak autv in user.ApplicationUserTijdvakken)
+                // reserve tijdvakken for the selected session
+                foreach (SessieTijdvak stv in sessie.SessieTijdvakken)
                 {
-                    if ( stv.TijdvakId == autv.TijdvakId)
+                    foreach (ApplicationUserTijdvak autv in user.ApplicationUserTijdvakken)
                     {
-                        autv.SessieId = stv.SessieId;
+                        if (stv.TijdvakId == autv.TijdvakId)
+                        {
+                            autv.SessieId = stv.SessieId;
+                        }
                     }
                 }
+                var saveresult = await _context.SaveChangesAsync();
             }
-            var saveresult = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(SelectSessies));
         }
     }

@@ -1,5 +1,9 @@
-﻿using RdwTechdayRegistration.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using RdwTechdayRegistration.Data;
+using RdwTechdayRegistration.Models;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace RdwTechdayRegistration.Models
 {
@@ -41,6 +45,67 @@ namespace RdwTechdayRegistration.Models
 
             }
             return start + " - " + einde;
+        }
+
+        public static async Task<Dictionary<int,int>> GetUserCountsAsync(ApplicationDbContext context)
+        {
+
+            var counts = new Dictionary<int,int>();
+            var conn = context.Database.GetDbConnection();
+            try
+            {
+                await conn.OpenAsync();
+                using (var command = conn.CreateCommand())
+                {
+                    string query = "SELECT SessieId, COUNT(DISTINCT ApplicationUserId)  from dbo.ApplicationUserTijdvakken WHERE SessieId IS NOT NULL GROUP BY SessieId";
+                    command.CommandText = query;
+                    DbDataReader reader = await command.ExecuteReaderAsync();
+
+                    if (reader.HasRows)
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            counts.Add(reader.GetInt32(0), reader.GetInt32(1));
+                        }
+                    }
+                    reader.Dispose();
+
+                }
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return counts;
+        }
+
+        public async Task<int> GetUserCountAsync(ApplicationDbContext context)
+        {
+            int count = 0;
+            var conn = context.Database.GetDbConnection();
+            try
+            {
+                await conn.OpenAsync();
+                using (var command = conn.CreateCommand())
+                {
+                    string query = $"SELECT SessieId, COUNT(DISTINCT ApplicationUserId)  from dbo.ApplicationUserTijdvakken WHERE SessieId = {Id.ToString()} GROUP BY SessieId";
+                    command.CommandText = query;
+                    DbDataReader reader = await command.ExecuteReaderAsync();
+
+                    if (reader.HasRows)
+                    {
+                        await reader.ReadAsync();
+                        count = reader.GetInt32(1);
+                    }
+                    reader.Dispose();
+
+                }
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return count;
         }
     }
 }

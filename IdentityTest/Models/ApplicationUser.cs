@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RdwTechdayRegistration.Data;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,6 +15,7 @@ namespace RdwTechdayRegistration.Models
         {
             ApplicationUserTijdvakken = new List<ApplicationUserTijdvak>();
         }
+
         [Required]
         [Display(Name = "Naam")]
         public string Name { get; set; }
@@ -28,10 +28,13 @@ namespace RdwTechdayRegistration.Models
         [Display(Name = "Telefoonnummer")]
         public override string PhoneNumber { get => base.PhoneNumber; set => base.PhoneNumber = value; }
 
+        public bool isRDW { get; set; }
+
         public ICollection<ApplicationUserTijdvak> ApplicationUserTijdvakken { get; set; }
 
         [NotMapped]
         public bool isAdmin { get; set; }
+
         public async Task AddTijdvakkenAsync(ApplicationDbContext context)
         {
             var tvlist = await context.Tijdvakken.ToListAsync();
@@ -40,6 +43,7 @@ namespace RdwTechdayRegistration.Models
                 ApplicationUserTijdvakken.Add(new ApplicationUserTijdvak { TijdvakId = tv.Id, ApplicationUserId = Id });
             }
         }
+
         public async static Task<int> ConfirmedUserCountAsync(ApplicationDbContext context)
         {
             var userCount = await context.Users.CountAsync(t => t.EmailConfirmed == true);
@@ -49,6 +53,19 @@ namespace RdwTechdayRegistration.Models
         public async static Task<int> UnconfirmedUserCountAsync(ApplicationDbContext context)
         {
             var userCount = await context.Users.CountAsync(t => t.EmailConfirmed == false);
+            return (int)userCount;
+        }
+
+        public async static Task<int> RdwuserCountAsync(ApplicationDbContext context)
+        {
+            var userCount = await context.Users.CountAsync(t => t.isRDW == true);
+            return (int)userCount;
+
+        }
+
+        public async static Task<int> NonRdwuserCountAsync(ApplicationDbContext context)
+        {
+            var userCount = await context.Users.CountAsync(t => t.isRDW== false);
             return (int)userCount;
         }
     }
