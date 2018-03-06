@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using RdwTechdayRegistration.Models.SessieViewModels;
+using System.Data.Common;
 
 namespace RdwTechdayRegistration.Controllers
 {
@@ -40,12 +41,42 @@ namespace RdwTechdayRegistration.Controllers
         public async Task<IActionResult> Index()
         {
             List<Sessie> sessies = await _context.Sessies
+                .AsNoTracking()
                 .Include(c => c.Ruimte)
                 .Include(c => c.SessieTijdvakken)
                     .ThenInclude(stv => stv.Tijdvak)
                 .Include(c => c.Track)
                 .OrderBy(s => s.Naam)
                 .ToListAsync();
+
+            var counts = new Dictionary<int,string>();
+            var conn = _context.Database.GetDbConnection();
+            try
+            {
+                await conn.OpenAsync();
+                using (var command = conn.CreateCommand())
+                {
+                    string query = "SELECT SessieId, count(ApplicationUserId)  from dbo.ApplicationUserTijdvakken WHERE SessieId IS NOT NULL GROUP BY SessieId, ApplicationUserId";
+                    command.CommandText = query;
+                    DbDataReader reader = await command.ExecuteReaderAsync();
+
+                    if (reader.HasRows)
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            counts.Add(reader.GetInt32(0), reader.GetInt32(1).ToString());
+                        }
+                    }
+                    reader.Dispose();
+
+                }
+            }
+            finally
+            {
+                conn.Close();
+            }
+            ViewBag.UserCounts = counts;
+
             return View(sessies);
         }
 

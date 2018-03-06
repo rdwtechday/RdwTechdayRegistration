@@ -40,6 +40,16 @@ namespace RdwTechdayRegistration.Models
                 ApplicationUserTijdvakken.Add(new ApplicationUserTijdvak { TijdvakId = tv.Id, ApplicationUserId = Id });
             }
         }
+        public async static Task<int> ConfirmedUserCountAsync(ApplicationDbContext context)
+        {
+            var userCount = await context.Users.CountAsync(t => t.EmailConfirmed == true);
+            return (int)userCount;
+        }
 
+        public async static Task<int> UnconfirmedUserCountAsync(ApplicationDbContext context)
+        {
+            var userCount = await context.Users.CountAsync(t => t.EmailConfirmed == false);
+            return (int)userCount;
+        }
     }
 }

@@ -1,9 +1,8 @@
-﻿using RdwTechdayRegistration.Data;
-using RdwTechdayRegistration.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using RdwTechdayRegistration.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,11 +31,17 @@ namespace RdwTechdayRegistration.Controllers
                 _context.Maxima.Add(maxima);
                 await _context.SaveChangesAsync();
             }
+            int confirmedUserCount = await ApplicationUser.ConfirmedUserCountAsync(_context);
+            int unconfirmedUserCount = await ApplicationUser.UnconfirmedUserCountAsync(_context);
+
+            ViewBag.ConfirmedUserCount = confirmedUserCount.ToString();
+            ViewBag.UnconfirmedUserCount = unconfirmedUserCount.ToString();
+
             return View(maxima);
         }
 
         // POST: Maxima/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]

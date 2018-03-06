@@ -23,11 +23,14 @@
             <th>
                 Tijd
             </th>
+            <th>
+                Vulling
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Naam)
@@ -40,6 +43,18 @@
             </td>
             <td>
                 @item.TimeRange()
+            </td>
+            <td>
+                @if (@ViewBag.UserCounts.ContainsKey(item.Id))
+                {
+                    <text>@ViewBag.UserCounts[item.Id]</text>
+                }
+                else
+                {
+                    <text>0</text>
+                }
+                /
+                @item.Ruimte.Capacity
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

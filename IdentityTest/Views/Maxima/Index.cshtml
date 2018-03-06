@@ -23,9 +23,36 @@
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </form>
+    </div>
 </div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">Totalen</div>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <text>Geverifieerde Gebruikers</text>
+                        </td>
+                        <td>
+                            @ViewBag.ConfirmedUserCount
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <text>Niet geverifieerde Gebruikers</text>
+                        </td>
+                        <td>
+                            @ViewBag.UnconfirmedUserCount
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
