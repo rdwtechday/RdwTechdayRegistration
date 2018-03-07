@@ -7,6 +7,16 @@
     ViewData["Message"] = "Welkom op deze site!";
 }
 
+@if (TempData["StatusMessage"] != null)
+{
+    string statusMessage = TempData["StatusMessage"].ToString();
+    var statusMessageClass = statusMessage.StartsWith("Fout") ? "danger" : "success";
+    <div class="alert alert-@statusMessageClass alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @statusMessage
+    </div>
+}
+
 
 @if (!SignInManager.IsSignedIn(User))
 {
