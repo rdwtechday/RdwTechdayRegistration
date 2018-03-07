@@ -242,7 +242,7 @@ namespace RdwTechdayRegistration.Controllers
                 }
             }
 
-            EditSessionSelection model = new EditSessionSelection { Sessies = availableSessies, TijdvakId = tijdvakid, CurrentSessionId = (int) sessieid };
+            EditSessionSelection model = new EditSessionSelection { Sessies = availableSessies, TijdvakId = tijdvakid, CurrentSessionId = (int)sessieid };
             model.UserCounts = await Sessie.GetUserCountsAsync(_context);
 
             return View(model);
@@ -286,6 +286,8 @@ namespace RdwTechdayRegistration.Controllers
                     autv.SessieId = null;
                 }
             }
+            TempData["StatusMessage"] = "U bent uitgeschreven voor de sessie...";
+
             var saveresult = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(SelectSessies));
         }
@@ -295,7 +297,7 @@ namespace RdwTechdayRegistration.Controllers
         public async Task<IActionResult> EditSessionSelection(EditSessionSelection model)
         {
             string id = _userManager.GetUserId(User);
-            if (model == null || id == null || model.TijdvakId == null )
+            if (model == null || id == null || model.TijdvakId == null)
             {
                 return NotFound();
             }
@@ -323,6 +325,8 @@ namespace RdwTechdayRegistration.Controllers
             }
 
             int usercount = await sessie.GetUserCountAsync(_context);
+            TempData["StatusMessage"] = "Fout: Registreren bij sessie niet gelukt, probeer het nog een keer...";
+
             if (usercount < sessie.Ruimte.Capacity)
             {
                 // release tijdvakken for the current session (as we might be going from a 2 tijdvak session to a 1 tijdvak session, we need to make sure all tijdvakken are released)
@@ -352,7 +356,15 @@ namespace RdwTechdayRegistration.Controllers
                         }
                     }
                 }
-                var saveresult = await _context.SaveChangesAsync();
+                try
+                {
+                    sessie.ForceChangeCount++;
+                    var saveresult = await _context.SaveChangesAsync();
+                    TempData["StatusMessage"] = "U bent geregistreerd voor de sessie...";
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                }
             }
             return RedirectToAction(nameof(SelectSessies));
         }

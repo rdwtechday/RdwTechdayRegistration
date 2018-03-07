@@ -5,6 +5,16 @@
     ViewData["Message"] = "Wat gaat u allemaal doen op de RDW Techday?";
 }
 
+@if (TempData["StatusMessage"] != null)
+{
+    string statusMessage = TempData["StatusMessage"].ToString();
+    var statusMessageClass = statusMessage.StartsWith("Fout") ? "danger" : "success";
+    <div class="alert alert-@statusMessageClass alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @statusMessage
+    </div>
+}
+
 @foreach (var atv in Model.ApplicationUserTijdvakken)
 {
     <div class="row">

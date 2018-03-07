@@ -2,6 +2,7 @@
 using RdwTechdayRegistration.Data;
 using RdwTechdayRegistration.Models;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace RdwTechdayRegistration.Models
         {
             ApplicationUserTijdvakken = new List<ApplicationUserTijdvak>();
             SessieTijdvakken = new List<SessieTijdvak>();
+            ForceChangeCount = 0;
         }
 
         public int Id { get; set; }
@@ -21,6 +23,13 @@ namespace RdwTechdayRegistration.Models
         public Ruimte Ruimte { get; set; }
         public int? TrackId { get; set; }
         public Track Track { get; set; }
+
+        // this field is used to create a dummy change so this record is forcibly saved
+        // to trigger a concurrency check in register session
+        public int ForceChangeCount { get; set; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
         public ICollection<ApplicationUserTijdvak> ApplicationUserTijdvakken { get; set; }
         public ICollection<SessieTijdvak> SessieTijdvakken { get; set; }
 
