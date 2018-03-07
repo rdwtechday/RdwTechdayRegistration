@@ -19,12 +19,8 @@ namespace RdwTechdayRegistration.Controllers
         }
 
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            int rdwUserCount = await ApplicationUser.RdwuserCountAsync(_context);
-            Maxima maxima = await _context.Maxima.SingleOrDefaultAsync();
-
-            ViewBag.ShowRegistreer = rdwUserCount < maxima.MaxRDW;
             return View();
         }
 

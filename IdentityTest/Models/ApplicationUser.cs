@@ -4,6 +4,7 @@ using RdwTechdayRegistration.Data;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RdwTechdayRegistration.Models
@@ -50,13 +51,31 @@ namespace RdwTechdayRegistration.Models
             return (int)userCount;
         }
 
+        public async static Task<int> ConfirmedRdwUserCountAsync(ApplicationDbContext context)
+        {
+            var userCount = await context.Users
+                .Where(t => t.isRDW == true)
+                .CountAsync(t => t.EmailConfirmed == true);
+
+            return (int)userCount;
+        }
+
+        public async static Task<int> ConfirmedNonRdwUserCountAsync(ApplicationDbContext context)
+        {
+            var userCount = await context.Users
+                .Where(t => t.isRDW == false)
+                .CountAsync(t => t.EmailConfirmed == true);
+
+            return (int)userCount;
+        }
+
         public async static Task<int> UnconfirmedUserCountAsync(ApplicationDbContext context)
         {
             var userCount = await context.Users.CountAsync(t => t.EmailConfirmed == false);
             return (int)userCount;
         }
 
-        public async static Task<int> RdwuserCountAsync(ApplicationDbContext context)
+        public async static Task<int> RdwUserCountAsync(ApplicationDbContext context)
         {
             var userCount = await context.Users.CountAsync(t => t.isRDW == true);
             return (int)userCount;
@@ -68,5 +87,22 @@ namespace RdwTechdayRegistration.Models
             var userCount = await context.Users.CountAsync(t => t.isRDW== false);
             return (int)userCount;
         }
+
+        public async static Task<bool> HasReachedMaxRdw(ApplicationDbContext context)
+        {
+            Maxima maxima = await context.Maxima.FirstOrDefaultAsync();
+            int count = await ConfirmedRdwUserCountAsync(context);
+
+            return (count >= maxima.MaxRDW);
+        }
+
+        public async static Task<bool> HasReachedMaxNonRdw(ApplicationDbContext context)
+        {
+            Maxima maxima = await context.Maxima.FirstOrDefaultAsync();
+            int count = await ConfirmedNonRdwUserCountAsync(context);
+
+            return (count >= maxima.MaxNonRDW);
+        }
+
     }
 }

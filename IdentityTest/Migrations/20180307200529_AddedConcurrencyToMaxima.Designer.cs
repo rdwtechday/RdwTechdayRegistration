@@ -11,9 +11,10 @@ using System;
 namespace RdwTechdayRegistration.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180307200529_AddedConcurrencyToMaxima")]
+    partial class AddedConcurrencyToMaxima
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,8 +219,6 @@ namespace RdwTechdayRegistration.Migrations
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<bool>("SiteHasBeenLocked");
 
                     b.HasKey("Id");
 

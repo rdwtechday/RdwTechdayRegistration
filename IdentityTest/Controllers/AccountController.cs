@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RdwTechdayRegistration.Data;
 using RdwTechdayRegistration.Models;
@@ -322,10 +323,18 @@ namespace RdwTechdayRegistration.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register(string returnUrl = null)
+        public async Task<IActionResult> Register(string returnUrl = null)
         {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
+            bool isFull = await ApplicationUser.HasReachedMaxRdw(_context);
+            if ( !isFull )
+            {
+                ViewData["ReturnUrl"] = returnUrl;
+                return View();
+            } else
+            {
+                TempData["StatusMessage"] = "Fout: Het maximum aantal inschrijvingen is bereikt";
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
         }
 
         [HttpPost]
@@ -340,24 +349,32 @@ namespace RdwTechdayRegistration.Controllers
             }
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, Organisation = "RDW" };
-                user.isRDW = true;
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                bool isFull = await ApplicationUser.HasReachedMaxRdw(_context);
+                if (!isFull)
                 {
-                    await _userManager.AddToRoleAsync(user, "User");
-                    await user.AddTijdvakkenAsync(_context);
-                    await _context.SaveChangesAsync();
-                    _logger.LogInformation("User created a new account with password.");
+                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, Organisation = "RDW" };
+                    user.isRDW = true;
+                    var result = await _userManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        await _userManager.AddToRoleAsync(user, "User");
+                        await user.AddTijdvakkenAsync(_context);
+                        await _context.SaveChangesAsync();
+                        _logger.LogInformation("User created a new account with password.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(user.Name, model.Email, callbackUrl);
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                        await _emailSender.SendEmailConfirmationAsync(user.Name, model.Email, callbackUrl);
 
-                    _logger.LogInformation("User created a new account with password.");
-                    return RedirectToAction(nameof(RegisterConfirmation));
+                        _logger.LogInformation("User created a new account with password.");
+                        return RedirectToAction(nameof(RegisterConfirmation));
+                    }
+                    AddErrors(result);
                 }
-                AddErrors(result);
+                else
+                {
+                    ModelState.AddModelError("", "Het maximum aantal inschrijvingen is bereikt");
+                }
             }
 
             // If we got this far, something failed, redisplay form
@@ -469,7 +486,12 @@ namespace RdwTechdayRegistration.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
-            if (userId == null || code == null)
+            bool isFull = await ApplicationUser.HasReachedMaxRdw(_context);
+            if (isFull)
+            {
+                TempData["StatusMessage"] = "Fout: Het maximum aantal inschrijvingen is bereikt";
+            }
+            if (userId == null || code == null || isFull )
             {
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }

@@ -1,8 +1,10 @@
 @using Microsoft.AspNetCore.Identity
 @using RdwTechdayRegistration.Models
+@using Microsoft.EntityFrameworkCore;
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject RdwTechdayRegistration.Data.ApplicationDbContext dbcontext
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -18,7 +20,18 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="" asp-controller="Account" asp-action="Register">Registreer</a></li>
+
+        @{
+            bool isFull = await ApplicationUser.HasReachedMaxRdw(dbcontext);
+            if (isFull)
+            {
+                <li><a>Registratie gesloten</a></li>
+            }
+            else
+            {
+                <li><a asp-area="" asp-controller="Account" asp-action="Register">Registreer</a></li>
+            }
+        }
         <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
     </ul>
 }

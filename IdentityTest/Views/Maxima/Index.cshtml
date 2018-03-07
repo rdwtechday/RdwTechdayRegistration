@@ -20,6 +20,11 @@
                 <span asp-validation-for="MaxNonRDW" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="SiteHasBeenLocked" class="control-label"></label>
+                <input asp-for="SiteHasBeenLocked" class="form-control" />
+                <span asp-validation-for="SiteHasBeenLocked" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </form>
@@ -46,6 +51,38 @@
                         </td>
                         <td>
                             @ViewBag.UnconfirmedUserCount
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <text>Geverifieerde RDW Gebruikers</text>
+                        </td>
+                        <td>
+                            @ViewBag.ConfirmedRdwUserCount
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <text>Ongeverifieerde RDW Gebruikers</text>
+                        </td>
+                        <td>
+                            @ViewBag.UnconfirmedRdwUserCount
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <text>Geverifieerde niet-RDW Gebruikers</text>
+                        </td>
+                        <td>
+                            @ViewBag.ConfirmedNonRdwUserCount
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <text>Ongeverifieerde niet-RDW Gebruikers</text>
+                        </td>
+                        <td>
+                            @ViewBag.UnconfirmedNonRdwUserCount
                         </td>
                     </tr>
                 </tbody>

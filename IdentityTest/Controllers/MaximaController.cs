@@ -33,9 +33,17 @@ namespace RdwTechdayRegistration.Controllers
             }
             int confirmedUserCount = await ApplicationUser.ConfirmedUserCountAsync(_context);
             int unconfirmedUserCount = await ApplicationUser.UnconfirmedUserCountAsync(_context);
+            int confirmedRdwUserCount = await ApplicationUser.ConfirmedRdwUserCountAsync(_context);
+            int confirmedNonRdwUserCount = await ApplicationUser.ConfirmedNonRdwUserCountAsync(_context);
+            int rdwUserCount = await ApplicationUser.RdwUserCountAsync(_context);
+            int nonRdwUserCount = await ApplicationUser.NonRdwuserCountAsync(_context);
 
             ViewBag.ConfirmedUserCount = confirmedUserCount.ToString();
             ViewBag.UnconfirmedUserCount = unconfirmedUserCount.ToString();
+            ViewBag.ConfirmedRdwUserCount = confirmedRdwUserCount.ToString();
+            ViewBag.ConfirmedNonRdwUserCount = confirmedNonRdwUserCount.ToString();
+            ViewBag.UnconfirmedRdwUserCount = rdwUserCount - confirmedRdwUserCount;
+            ViewBag.UnconfirmedNonRdwUserCount = nonRdwUserCount - confirmedNonRdwUserCount;
 
             return View(maxima);
         }
@@ -45,7 +53,7 @@ namespace RdwTechdayRegistration.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,MaxRDW,MaxNonRDW")] Maxima maxima)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,MaxRDW,MaxNonRDW,SiteHasBeenLocked")] Maxima maxima)
         {
             if (id != maxima.Id)
             {
@@ -54,9 +62,12 @@ namespace RdwTechdayRegistration.Controllers
 
             if (ModelState.IsValid)
             {
+                var dbmaxima = await _context.Maxima.SingleOrDefaultAsync(t => t.Id == maxima.Id);
                 try
                 {
-                    _context.Update(maxima);
+                    dbmaxima.MaxRDW = maxima.MaxRDW;
+                    dbmaxima.MaxNonRDW = maxima.MaxNonRDW;
+                    dbmaxima.SiteHasBeenLocked = maxima.SiteHasBeenLocked;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -70,7 +81,7 @@ namespace RdwTechdayRegistration.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
             return View(maxima);
         }
