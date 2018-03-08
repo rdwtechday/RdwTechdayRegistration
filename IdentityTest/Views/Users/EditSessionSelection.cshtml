@@ -10,26 +10,28 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="col-md-10">
-                <p><span class="label label-primary label-sessieselect" style="background-color: #@(sessie.Track.Rgb);">@(sessie.Track.Naam)</span> @(sessie.TimeRange()) 
-                @if ( sessie.SessieTijdvakken.Count() > 1)
-                {
-                    <span class="label label-primary label-sessieselect">Lange sessie</span>
-                }
-                @if (@Model.UserCounts.ContainsKey(sessie.Id))
-                {
-                    if (@Model.UserCounts[sessie.Id] < sessie.Ruimte.Capacity)
+                <p>
+                    <span class="label label-primary label-sessieselect" style="background-color: #@(sessie.Track.Rgb);">@(sessie.Track.Naam)</span> @(sessie.TimeRange())
+                    @if ( sessie.SessieTijdvakken.Count() > 1)
                     {
-                        <text>(nog @(sessie.Ruimte.Capacity - Model.UserCounts[sessie.Id]) plaatsen)</text>
-                    } else
-                    {
-                    <span class="label label-danger label-sessieselect">VOL</span> 
+                        <span class="label label-primary label-sessieselect">Lange sessie</span>
                     }
-                }
-                else
-                {
-                    <text>(nog @sessie.Ruimte.Capacity plaatsen)</text>
-                }
+                    @if (@Model.UserCounts.ContainsKey(sessie.Id))
+                    {
+                        var spaceLeft  = sessie.Ruimte.Capacity - Model.UserCounts[sessie.Id];
 
+                        if ( spaceLeft > 0 )
+                        {
+                            <text>(nog @spaceLeft plaats@(spaceLeft == 1 ? "" : "en"))</text>
+                        } else
+                        {
+                            <span class="label label-danger label-sessieselect">VOL</span>
+                        }
+                    }
+                    else
+                    {
+                        <text>(nog @sessie.Ruimte.Capacity plaats@(sessie.Ruimte.Capacity == 1 ? "" : "en"))</text>
+                    }
                 </p>
                 <p>@(sessie.Naam)</p>
             </div>
