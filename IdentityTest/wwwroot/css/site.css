@@ -4,6 +4,7 @@
 
 .jumbotron a {
     color: #c30;
+    background-color: #f2f2f5;
 }
 
 body {
@@ -22,6 +23,24 @@ body {
 #qrCode {
     margin: 15px;
 }
+
+
+.navbar-nav > li > a, .navbar-brand {
+    padding-top: 10px !important;
+    padding-bottom: 0 !important;
+    height: 40px;
+}
+
+.navbar {
+    min-height: 40px !important;
+}
+
+.navbar-toggle {
+    padding: 0 0;
+    margin-top: 7px;
+    margin-bottom: 0;
+}
+
 
 .navbar-inverse {
     background-color: #C30;
@@ -163,6 +182,10 @@ body {
     border-right: 1px solid #fff;
     margin-right: 10px;
 }
+
+
+
+
 
 .btn-rdw {
     color: #fff;
