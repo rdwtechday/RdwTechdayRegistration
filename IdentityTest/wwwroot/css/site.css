@@ -1,13 +1,42 @@
-﻿h1, h2, h3, h4, label {
+﻿@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab');
+
+h1, h2, h3, h4 {
+    font-family: 'Roboto Slab', serif;
+    font-weight: 400;
     color: #003;
 }
 
-.jumbotron a {
+label {
+    color: #003;
+    font-weight: bold;
+}
+
+a {
     color: #c30;
+}
+
+a:hover {
+    color: #003;
+}
+
+.input-validation-error {
+    background-color: #F2CCCF;
+}
+
+.field-validation-error {
+    /* offical colors look very bad here
+    color: #c30;
+    background-color: #FCFCFC;
+    */
+}
+
+.jumbotron a {
     background-color: #f2f2f5;
 }
 
 body {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     padding-top: 60px;
     padding-bottom: 20px;
 }
@@ -76,13 +105,22 @@ body {
     background-color: #c30;
 }
 
- .title-row h2 {
-    margin-top: 4px;
+ .title-row {
+    margin-top: 0px;
+}
+
+.title-row h2 {
+    margin-top: 0px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
 }
 
 .title-row h4 {
     color: #666;
-    font-size: 1.2em;    
+    margin-top: 0px;
+    font-size: 1.2em;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
 }
 
 .title-row img {
