@@ -53,7 +53,6 @@ body {
     margin: 15px;
 }
 
-
 .navbar-nav > li > a, .navbar-brand {
     padding-top: 10px !important;
     padding-bottom: 0 !important;
@@ -73,7 +72,7 @@ body {
 
 .navbar-inverse {
     background-color: #C30;
-    border-color: #fff;
+    border-width: 0px;
 }
 
 .navbar-inverse .navbar-brand {
@@ -93,6 +92,16 @@ body {
     color: #C30;
     background-color: #fff;
     font-weight: bold;
+}
+
+.navbar-inverse .navbar-header .navbar-toggle {
+    padding: 6px;
+    background-color: #c30;
+    border-width: 0px;
+}
+
+.navbar-inverse .navbar-header .navbar-toggle:hover {
+    background-color: #b20;
 }
 
 .open > #stambellen-dropdown {
