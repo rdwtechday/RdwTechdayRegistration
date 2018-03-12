@@ -27,12 +27,39 @@
                 </select>
                 <span asp-validation-for="RuimteId" class="text-danger" />
             </div>
+
+            <label>Tijdvakken</label>
+            <div class="form-group">
+                <div class="col-md-10">
+                    <table>
+                            @{
+                                List<RdwTechdayRegistration.Models.SessieViewModels.SessieTijdvakData> tijdvakken = ViewBag.Tijdvakken;
+
+                                foreach (var tijdvak in tijdvakken)
+                                {
+                                    @:<tr>
+                                    @:<td>
+                                        <input type="checkbox"
+                                               name="selectedTijdvakken"
+                                               value="@tijdvak.TijdvakId"
+                                               @(Html.Raw(tijdvak.Assigned ? "checked=\"checked\"" : "")) />
+                                               @tijdvak.Title
+                                    @:</td>
+                                    @:</tr>
+                                }
+                            }
+                    </table>
+                </div>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
+
+
 
 <div>
     <a asp-action="Index">Back to List</a>

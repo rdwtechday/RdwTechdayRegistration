@@ -81,6 +81,7 @@ namespace RdwTechdayRegistration.Controllers
         {
             PopulateTracksDropDownList();
             PopulateRuimtesDropDownList();
+            PopulateSessieTijdvakData();
             return View();
         }
 
@@ -89,17 +90,19 @@ namespace RdwTechdayRegistration.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Naam,TrackId,RuimteId")] Sessie sessie)
+
+        public async Task<IActionResult> Create([Bind("Id,Naam,TrackId,RuimteId")] Sessie sessie, string[] selectedTijdvakken)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(sessie);
+                UpdateSessieTijdvakken(selectedTijdvakken, sessie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             PopulateTracksDropDownList(sessie.TrackId);
-            //PopulateTijdvakDropDownList(sessie.TijdvakId);
             PopulateRuimtesDropDownList(sessie.RuimteId);
+            PopulateSessieTijdvakData(sessie);
             return View(sessie);
         }
 
@@ -127,6 +130,22 @@ namespace RdwTechdayRegistration.Controllers
             return View(sessie);
         }
 
+        private void PopulateSessieTijdvakData()
+        {
+            var tijdvakken = _context.Tijdvakken.OrderBy(t => t.Order);
+
+            var viewModel = new List<SessieTijdvakData>();
+            foreach (var tv in tijdvakken)
+            {
+                viewModel.Add(new SessieTijdvakData
+                {
+                    TijdvakId = tv.Id,
+                    Title = tv.TimeRange(),
+                    Assigned = false
+                });
+            }
+            ViewData["Tijdvakken"] = viewModel;
+        }
         private void PopulateSessieTijdvakData(Sessie sessie)
         {
             var tijdvakken = _context.Tijdvakken.OrderBy(t => t.Order);

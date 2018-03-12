@@ -43,6 +43,14 @@ namespace Microsoft.AspNetCore.Mvc
                 values: null,
                 protocol: scheme);
         }
+        public static string PrivacyLink(this IUrlHelper urlHelper, string scheme)
+        {
+            return urlHelper.Action(
+                action: nameof(HomeController.Privacy),
+                controller: "Home",
+                values: null,
+                protocol: scheme);
+        }
 
     }
 }

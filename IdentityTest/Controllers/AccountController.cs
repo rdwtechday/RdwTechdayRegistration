@@ -246,15 +246,18 @@ namespace RdwTechdayRegistration.Controllers
                     var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                     var callbackUrl = Url.RegisterNonRDWCallbackLink(user.Id, code, Request.Scheme);
                     var loginurl = Url.LoginLink(Request.Scheme);
+                    var privacyurl = Url.PrivacyLink(Request.Scheme);
                     string htmlMessage = $"Beste {user.Name},<br/><br/>Wij hebben een account voor u aangemaakt waarmee u zich kunt registreren voor sessies op de RDW Techday. Om toegang te krijgen, dient u een nieuw wachtwoord in te stellen via de volgende <a href='{callbackUrl}'>link</a>." +
                        $"<br/><br/>LET OP: Bovenstaande link werkt eenmalig. Indien u deze mail al heeft bevestigd, dan kan kan u <a href='{loginurl}'>hier inloggen</a>." +
-                       $"<br/><br/><br/>Met vriendelijke groet,<br/><br/>RDW Techday";
+                       $"<br/><br/><br/>Met vriendelijke groet,<br/><br/>RDW Techday" +
+                       $"<br/><br/><br/>Zie ook onze <a href='{privacyurl}'>privacyverklaring</a>";
 
                     string plainMessage = $"Beste {user.Name}" + Environment.NewLine + Environment.NewLine +
                        $"Wij hebben een account voor u aangemaakt waarmee u zich kunt registreren voor sessies op de RDW Techday. Om toegang te krijgen, dient u een nieuw wachtwoord in te stellen via de volgende link: {callbackUrl}" + Environment.NewLine + Environment.NewLine +
                        $"LET OP: Bovenstaande link werkt eenmalig. Indien u deze mail al heeft bevestigd, dan kan kan u hier inloggen: {loginurl}" + Environment.NewLine + Environment.NewLine + Environment.NewLine +
                        $"Met vriendelijke groet," + Environment.NewLine + Environment.NewLine +
-                       $"RDW Techday";
+                       $"RDW Techday" + Environment.NewLine + Environment.NewLine +
+                       $"Zie ook onze privacyverklaring: {privacyurl}";
 
                     await _emailSender.SendEmailAsync(model.Email, "Welkom bij de RDW Techday", plainMessage, htmlMessage);
                     return Redirect(nameof(RegisterNonRdwConfirmation));
