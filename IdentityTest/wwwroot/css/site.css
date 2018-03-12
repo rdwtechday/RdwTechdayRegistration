@@ -104,6 +104,10 @@ body {
     background-color: #b20;
 }
 
+.navbar-inverse .navbar-collapse {
+    border-width: 0 !important;
+}
+
 .open > #stambellen-dropdown {
     color: #fff;
     background-color: #c30;
