@@ -21,12 +21,16 @@
 @if (!SignInManager.IsSignedIn(User))
 {
     <div class="jumbotron">
-        <h2>Welkom bij de registratie voor de RDW Techday!</h2>
+        <h2>Welkom op de registratiesite voor de RDW Techday!</h2>
         <p>Op deze site kunt u zich registreren voor het RDW Techday event.</p>
-        <p>RDW Medewerkers kunnen zich direct <a asp-area="" asp-controller="Account" asp-action="Register">inschrijven</a>. Na inschrijving en het bevestigen van de e-mail kunt u <a asp-area="" asp-controller="Account" asp-action="Login">inloggen</a> om sessies te kiezen waaraan u deel wil nemen.</p>
         <p>
-            Bent u geen RDW'er en is uw bedrijf wel lid van Samenwerking Noord? Dan kunt u zich opgeven voor het event via de <a href="http://samenwerkingnoord.nl">Samenwerking Noord</a>.
-            Wij sturen u een e-mail met een link om u in te schrijven zodra de Samenwerking Noord uw naam aan ons heeft doorgegeven.
+            Medewerkers van RDW kunnen zich direct <a asp-area="" asp-controller="Account" asp-action="Register">inschrijven</a>. 
+            Na inschrijving en het bevestigen van de e-mail kan je <a asp-area="" asp-controller="Account" asp-action="Login">inloggen</a> om sessies te kiezen waaraan je deel wil nemen.
+            Wacht niet te lang, zodat je zeker weet dat je kunt deelnemen aan de sessies van je keuze.
+        </p>
+        <p>
+            Werk je niet bij RDW maar ben je wel lid van Samenwerking Noord? Dan kun je je aanmelden voor het event via <a href="http://samenwerkingnoord.nl">Samenwerking Noord</a>.
+            Wij sturen een e-mail met een inschrijflink zodra Samenwerking Noord je naam aan ons heeft doorgegeven.
         </p>
 
         <br /><p>Meer informatie nodig over het event? Ga dan naar de <a href="http://rdwtechday.nl" target="_blank">site</a> van het event.</p>
