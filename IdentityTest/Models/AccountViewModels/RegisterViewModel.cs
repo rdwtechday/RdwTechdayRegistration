@@ -15,7 +15,7 @@ namespace RdwTechdayRegistration.Models.AccountViewModels
         public string Email { get; set; }
 
         [Required]
-        [Display(Name = "Naam")]
+        [Display(Name = "Voor- en Achternaam")]
         public string Name { get; set; }
 
         [Required]

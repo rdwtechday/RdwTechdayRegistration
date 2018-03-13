@@ -10,7 +10,7 @@ namespace RdwTechdayRegistration.Models.AccountViewModels
     public class RegisterNonRdwViewModel : IValidatableObject
     {
         [Required]
-        [Display(Name = "Naam")]
+        [Display(Name = "Voor- en Achternaam")]
         public string Name { get; set; }
 
         [Required]
