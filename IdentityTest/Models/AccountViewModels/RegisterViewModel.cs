@@ -29,6 +29,10 @@ namespace RdwTechdayRegistration.Models.AccountViewModels
         [Compare("Password", ErrorMessage = "De wachtwoorden komen niet overeen.")]
         public string ConfirmPassword { get; set; }
 
+        [Required]
+        [Display(Name = "Divisie")]
+        public string Department { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (!EmailValidator.IsValid(Email))

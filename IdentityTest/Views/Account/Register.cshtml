@@ -19,6 +19,13 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Department" class="control-label"></label>
+                <select asp-for="Department" class="form-control" asp-items="ViewBag.Divisies">
+                    <option value="">-- Selecteer Divisie--</option>
+                </select>
+                <span asp-validation-for="Department" class="text-danger" />
+            </div>
+            <div class="form-group">
                 <label asp-for="Password"></label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>

@@ -66,6 +66,8 @@ namespace RdwTechdayRegistration.Controllers
                 .Include(c => c.SessieTijdvakken)
                     .ThenInclude(stv => stv.Tijdvak)
                 .Include(c => c.Track)
+                .Include(c => c.ApplicationUserTijdvakken)
+                    .ThenInclude(c => c.ApplicationUser)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
             if (sessie == null)
@@ -73,6 +75,21 @@ namespace RdwTechdayRegistration.Controllers
                 return NotFound();
             }
 
+            /* bit brute force, but given low number of users it should be ok */
+            var userIDs = new HashSet<string>();
+            var users = new List<ApplicationUser>();
+
+            foreach (ApplicationUserTijdvak atv in sessie.ApplicationUserTijdvakken)
+            {
+                if (!userIDs.Contains(atv.ApplicationUserId))
+                {
+                    users.Add(atv.ApplicationUser);
+                    userIDs.Add(atv.ApplicationUserId);
+                }
+            }
+
+            ViewBag.Attendants = users
+                .OrderBy(c => c.Name);
             return View(sessie);
         }
 

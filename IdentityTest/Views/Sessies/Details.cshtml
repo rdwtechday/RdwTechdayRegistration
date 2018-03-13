@@ -6,33 +6,46 @@
 }
 
 <div>
-
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Naam)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Naam)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Track.Naam)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Track.Naam)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Ruimte.Naam)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Ruimte.Naam)
-        </dd>
-        <dt>
-            Tijd
-        </dt>
-        <dd>
-            @Model.TimeRange()
-        </dd>
-    </dl>
+    <div class="form-group">
+        <label asp-for="Naam" class="control-label"></label>
+        <input asp-for="Naam" class="form-control" disabled />
+    </div>
+    <div class="form-group">
+        <label asp-for="Track.Naam" class="control-label"></label>
+        <input asp-for="Track.Naam" class="form-control" disabled />
+    </div>
+    <div class="form-group">
+        <label asp-for="Ruimte.Naam" class="control-label"></label>
+        <input asp-for="Ruimte.Naam" class="form-control" disabled />
+    </div>
+    <div class="form-group">
+        <label class="control-label">Tijd</label>
+        <input value="@Model.TimeRange()" class="form-control" disabled />
+    </div>
+</div>
+<div>
+    <h2>Deelnemers:</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Organisatie</th>
+                <th>Divisie</th>
+                <th>E-Mail</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ApplicationUser user in ViewBag.Attendants)
+            {
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.Organisation</td>
+                <td>@user.Department</td>
+                <td><a href="mailto:@Html.DisplayTextFor(modelItem => user.Email)" target="_top"><span class='fa fa-envelope'>&nbsp;</span>@Html.DisplayTextFor(modelItem => user.Email)</a></td>
+            </tr>
+            }
+        </tbody>
+    </table>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RdwTechdayRegistration.Data;
@@ -9,6 +10,7 @@ using RdwTechdayRegistration.Models;
 using RdwTechdayRegistration.Models.AccountViewModels;
 using RdwTechdayRegistration.Services;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -324,6 +326,13 @@ namespace RdwTechdayRegistration.Controllers
             return View(model);
         }
 
+        private void PopulateDivisiesDropDownList(object selectedDivisie = null)
+        {
+
+            List<string> divisies = new List<string> { "D&S", "ICT", "R&I", "T&B", "VRT"};
+            ViewBag.Divisies = new SelectList(divisies, selectedDivisie);
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Register(string returnUrl = null)
@@ -332,6 +341,7 @@ namespace RdwTechdayRegistration.Controllers
             if ( !isFull )
             {
                 ViewData["ReturnUrl"] = returnUrl;
+                PopulateDivisiesDropDownList();
                 return View();
             } else
             {
@@ -355,7 +365,7 @@ namespace RdwTechdayRegistration.Controllers
                 bool isFull = await ApplicationUser.HasReachedMaxRdw(_context);
                 if (!isFull)
                 {
-                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, Organisation = "RDW" };
+                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, Organisation = "RDW", Department = model.Department };
                     user.isRDW = true;
                     var result = await _userManager.CreateAsync(user, model.Password);
                     if (result.Succeeded)

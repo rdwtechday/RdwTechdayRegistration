@@ -14,6 +14,9 @@
                 @Html.DisplayNameFor(model => model.Organisation)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Department)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
@@ -33,6 +36,10 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Organisation)
                 </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Department)
+                </td>
+               
                 <td>
                     <a href="mailto:@Html.DisplayTextFor(modelItem => item.Email)" target="_top"><span class='fa fa-envelope'>&nbsp;</span>@Html.DisplayTextFor(modelItem => item.Email)</a>
                 </td>

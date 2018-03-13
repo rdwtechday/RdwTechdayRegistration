@@ -25,6 +25,9 @@ namespace RdwTechdayRegistration.Models
         [Display(Name = "Organisatie")]
         public string Organisation { get; set; }
 
+        [Display(Name="Divisie")]
+        public string Department { get; set; }
+
         // override it so we can localize the displaystring
         [Display(Name = "Telefoonnummer")]
         public override string PhoneNumber { get => base.PhoneNumber; set => base.PhoneNumber = value; }
