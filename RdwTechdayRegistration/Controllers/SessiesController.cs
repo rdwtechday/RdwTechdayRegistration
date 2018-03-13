@@ -77,7 +77,7 @@ namespace RdwTechdayRegistration.Controllers
 
             /* bit brute force, but given low number of users it should be ok */
             var userIDs = new HashSet<string>();
-            var users = new List<ApplicationUser>();
+            List<ApplicationUser> users = new List<ApplicationUser>();
 
             foreach (ApplicationUserTijdvak atv in sessie.ApplicationUserTijdvakken)
             {
@@ -87,9 +87,7 @@ namespace RdwTechdayRegistration.Controllers
                     userIDs.Add(atv.ApplicationUserId);
                 }
             }
-
-            ViewBag.Attendants = users
-                .OrderBy(c => c.Name);
+            ViewBag.Attendants = users.OrderBy(c => c.Name).ToList();
             return View(sessie);
         }
 

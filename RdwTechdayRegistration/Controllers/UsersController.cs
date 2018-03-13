@@ -39,6 +39,38 @@ namespace RdwTechdayRegistration.Controllers
             return View(users);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.ApplicationUsers
+                .SingleOrDefaultAsync(m => m.Id == id);
+
+            List<ApplicationUserTijdvak> atv = await _context.ApplicationUserTijdvakken
+                .Where(t => t.ApplicationUserId == user.Id)
+                .Where(t => t.SessieId != null)
+                .Include( t => t.Sessie)
+                    .ThenInclude(t => t.Track)
+                .Include(t => t.Tijdvak)
+                .OrderBy(t => t.Tijdvak.Order)
+                .ToListAsync();
+
+            ViewBag.ApplicationUserTijdvakken = atv;
+
+            if (user== null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+
         // GET: Deelnemers/Delete/5
         [HttpGet]
         [Authorize(Roles = "Admin")]

@@ -1,0 +1,51 @@
+﻿@model RdwTechdayRegistration.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Gebruiker";
+    ViewData["Message"] = "Details";
+}
+
+<div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" disabled />
+    </div>
+    <div class="form-group">
+        <label asp-for="Organisation" class="control-label"></label>
+        <input asp-for="Organisation" class="form-control" disabled />
+    </div>
+</div>
+<div>
+    @if ( ViewBag.ApplicationUserTijdvakken.Count  > 0)
+    {
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tijd</th>
+                <th>Track</th>
+                <th>Sessie</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ApplicationUserTijdvak atv in ViewBag.ApplicationUserTijdvakken)
+            {
+            <tr>
+                <td>@atv.Tijdvak.TimeRange()</td>
+                <td>@atv.Sessie.Track.Naam</td>
+                <td><a asp-action="Details" asp-controller="Sessies" asp-route-id="@atv.SessieId">@Html.DisplayFor(modelItem => atv.Sessie.Naam)</a></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    } else
+    {
+        <br/>
+        <p>Deze gebruiker heeft geen sessies geselecteeerd</p>
+        <br/>
+    }
+
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

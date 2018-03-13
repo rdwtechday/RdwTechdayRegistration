@@ -24,28 +24,34 @@
     </div>
 </div>
 <div>
-    <h2>Deelnemers:</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Naam</th>
-                <th>Organisatie</th>
-                <th>Divisie</th>
-                <th>E-Mail</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (ApplicationUser user in ViewBag.Attendants)
-            {
-            <tr>
-                <td>@user.Name</td>
-                <td>@user.Organisation</td>
-                <td>@user.Department</td>
-                <td><a href="mailto:@Html.DisplayTextFor(modelItem => user.Email)" target="_top"><span class='fa fa-envelope'>&nbsp;</span>@Html.DisplayTextFor(modelItem => user.Email)</a></td>
-            </tr>
-            }
-        </tbody>
-    </table>
+    @if (ViewBag.Attendants.Count > 0)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Organisatie</th>
+                    <th>Divisie</th>
+                    <th>E-Mail</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ApplicationUser user in ViewBag.Attendants)
+                {
+                <tr>
+                    <td><a asp-action="Details" asp-controller="Users" asp-route-id="@user.Id">@Html.DisplayFor(modelItem => user.Name)</a></td>
+                    <td>@user.Organisation</td>
+                    <td>@user.Department</td>
+                    <td><a href="mailto:@Html.DisplayTextFor(modelItem => user.Email)" target="_top"><span class='fa fa-envelope'>&nbsp;</span>@Html.DisplayTextFor(modelItem => user.Email)</a></td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Deze sessie heeft nog geen deelnemers.</p>
+    }
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
