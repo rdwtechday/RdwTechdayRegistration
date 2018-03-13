@@ -389,7 +389,7 @@ namespace RdwTechdayRegistration.Controllers
                     ModelState.AddModelError("", "Het maximum aantal inschrijvingen is bereikt");
                 }
             }
-
+            PopulateDivisiesDropDownList(model.Department);
             // If we got this far, something failed, redisplay form
             return View(model);
         }
