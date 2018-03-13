@@ -62,7 +62,9 @@ namespace RdwTechdayRegistration.Controllers
                 Organisation = user.Organisation,
                 PhoneNumber = user.PhoneNumber,
                 IsEmailConfirmed = user.EmailConfirmed,
-                StatusMessage = StatusMessage
+                StatusMessage = StatusMessage,
+                Department = user.Department,
+                isRdw = user.isRDW               
             };
 
             return View(model);
@@ -86,6 +88,7 @@ namespace RdwTechdayRegistration.Controllers
             user.Name = model.Name;
             user.PhoneNumber = model.PhoneNumber;
             user.Organisation = model.Organisation;
+            user.Department = model.Department;
 
             var result = await _userManager.UpdateAsync(user);
                 

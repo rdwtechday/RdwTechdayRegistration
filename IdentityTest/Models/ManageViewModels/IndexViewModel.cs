@@ -14,15 +14,18 @@ namespace RdwTechdayRegistration.Models.ManageViewModels
         public string Email { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
-
+        public bool isRdw { get; set; }
 
         [Required]
-        [Display(Name = "Naam")]
+        [Display(Name = "Voor- en Achternaam")]
         public string Name{ get; set; }
 
         [Phone]
         [Display(Name = "Telefoonnummer")]
         public string PhoneNumber { get; set; }
+
+        [Display(Name = "Divisie")]
+        public string Department { get; set; }
 
         [Required]
         [Display(Name = "Organisatie")]
