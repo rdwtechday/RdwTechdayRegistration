@@ -7,6 +7,9 @@ using RdwTechdayRegistration.Models.UserViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RdwTechdayRegistration.Utility;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace RdwTechdayRegistration.Controllers
 
@@ -16,11 +19,13 @@ namespace RdwTechdayRegistration.Controllers
     {
         private readonly RdwTechdayRegistration.Data.ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public UsersController(RdwTechdayRegistration.Data.ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public UsersController(RdwTechdayRegistration.Data.ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
             _userManager = userManager;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         // GET: Deelnemers
@@ -38,6 +43,34 @@ namespace RdwTechdayRegistration.Controllers
             }
             return View(users);
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Badges()
+        {
+            List<ApplicationUser> users = await _context.ApplicationUsers
+                .OrderBy(u => u.Name)
+                .Where(u => u.EmailConfirmed)
+                .Include(i => i.ApplicationUserTijdvakken)
+                    .ThenInclude(i => i.Sessie)
+                        .ThenInclude(i => i.Track)
+                .Include(i => i.ApplicationUserTijdvakken)
+                    .ThenInclude(i => i.Tijdvak)
+                .ToListAsync();
+            // brute force, maybe refactor if too slow
+            foreach (ApplicationUser user in users)
+            {
+                user.isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            }
+
+            string imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images/badge_banner.jpg");
+            Stream stream = new MemoryStream();
+            BadgeGenerator bg = new BadgeGenerator(stream, imagePath);
+            bg.FillPages(users);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "badges.pdf");
+        }
+
 
         [HttpGet]
         [Authorize(Roles = "Admin")]

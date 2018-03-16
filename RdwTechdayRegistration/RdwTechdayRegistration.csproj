@@ -12,6 +12,7 @@
     <PackageReference Include="Bogus" Version="22.0.2" />
     <PackageReference Include="bootstrap" Version="4.0.0" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.6.362" />
+    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.4.2" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.0.1" />

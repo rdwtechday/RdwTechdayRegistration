@@ -15,6 +15,9 @@ namespace RdwTechdayRegistration.Models
         [Display(Name = "RGB Kleurcode")]
         public string Rgb { get; set; }
 
+        [Display(Name = "Badge Code")]
+        public string BadgeCode { get; set; }
+
         public List<Sessie> Sessies { get; set; }
         //public List<ApplicationUserTijdvak> ApplicationUserTijdvakken { get; set; }
         //public List<TrackTijdvak> Tijdvakken { get; set; }

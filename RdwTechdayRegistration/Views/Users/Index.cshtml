@@ -4,6 +4,12 @@
     ViewData["Title"] = "Users";
     ViewData["Message"] = "Inzien en Bewerken";
 }
+
+
+<p>
+    <a asp-action="Badges" class="btn btn-rdw">Download Badges</a>
+</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -39,24 +45,24 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Department)
                 </td>
-               
+
                 <td>
                     <a href="mailto:@Html.DisplayTextFor(modelItem => item.Email)" target="_top"><span class='fa fa-envelope'>&nbsp;</span>@Html.DisplayTextFor(modelItem => item.Email)</a>
                 </td>
                 <td>
-                    @{ if ( item.PhoneNumber != null && item.PhoneNumber.Trim().Length != 0)
-                    {
-                        <a href="tel:@Html.DisplayTextFor(modelItem => item.PhoneNumber)" target="_top"><span class='fa fa-phone'>&nbsp;</span>@Html.DisplayTextFor(modelItem => item.PhoneNumber)</a>
-                    }}
+                    @{ if (item.PhoneNumber != null && item.PhoneNumber.Trim().Length != 0)
+                        {
+                            <a href="tel:@Html.DisplayTextFor(modelItem => item.PhoneNumber)" target="_top"><span class='fa fa-phone'>&nbsp;</span>@Html.DisplayTextFor(modelItem => item.PhoneNumber)</a>
+                        }}
                 </td>
                 <td>
                     @(item.EmailConfirmed ? "Ja" : "Nee")
                 </td>
                 <td>
-                    @if ( item.UserName != User.Identity.Name)
+                    @if (item.UserName != User.Identity.Name)
                     {
                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> <text>|</text>
-                        @if ( item.isAdmin )
+                        @if (item.isAdmin)
                         {
                             <a asp-action="RevokeAdminRole" asp-route-id="@item.Id">Intrekken Administrator</a>
                         }
@@ -64,7 +70,8 @@
                         {
                             <a asp-action="AddAdminRole" asp-route-id="@item.Id">Maak Administrator</a>
                         }
-                    } else
+                    }
+                    else
                     {
                         <span>Dit bent u zelf</span>
                     }

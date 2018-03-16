@@ -54,7 +54,7 @@ namespace RdwTechdayRegistration.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Naam,Rgb")] Track track)
+        public async Task<IActionResult> Create([Bind("Id,Naam,Rgb,BadgeCode")] Track track)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace RdwTechdayRegistration.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,Rgb")] Track track)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,Rgb,BadgeCode")] Track track)
         {
             if (id != track.Id)
             {
