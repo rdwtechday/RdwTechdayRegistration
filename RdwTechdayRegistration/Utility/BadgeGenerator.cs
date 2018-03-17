@@ -118,7 +118,15 @@ namespace RdwTechdayRegistration.Utility
 
         private void AddOrganizatonCell(PdfPTable table, string organisation)
         {
-            PdfPCell cell = new PdfPCell(new Phrase(String.Format(organisation), _fontOrganization)) { Colspan = 6 };
+            PdfPCell cell;
+            if (organisation == null)
+            {
+                cell = new PdfPCell() { Colspan = 6 };
+            }
+            else
+            {
+                cell = new PdfPCell(new Phrase(String.Format(organisation), _fontOrganization)) { Colspan = 6 };
+            }
             cell.FixedHeight = 27.0f;
             cell.BorderWidth = 0;
             cell.PaddingBottom = 10.0f;
@@ -129,9 +137,17 @@ namespace RdwTechdayRegistration.Utility
 
         private void AddPersonCell(PdfPTable table, BadgePersonType personType, string name)
         {
+            PdfPCell cell;
             Font fontName = SelecctFontForPerson(personType);
 
-            PdfPCell cell = new PdfPCell(new Phrase(String.Format(name), fontName)) { Colspan = 6 };
+            if (name == null)
+            {
+                cell = new PdfPCell() { Colspan = 6 };
+            }
+            else
+            {
+                cell = new PdfPCell(new Phrase(String.Format(name), fontName)) { Colspan = 6 };
+            }
             cell.FixedHeight = 51.0f;
             cell.BorderWidth = 0;
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -268,7 +284,14 @@ namespace RdwTechdayRegistration.Utility
             table.LockedWidth = true;
 
             AddPersonCell(table, badge.PersonType, badge.name);
-            AddOrganizatonCell(table, badge.organisation);
+            if (badge.PersonType == BadgePersonType.organizer)
+            {
+                AddOrganizatonCell(table, "Techday Organisatie");
+            }
+            else
+            {
+                AddOrganizatonCell(table, badge.organisation);
+            }
             AddPhotoCell(table);
             AddEmptySessionsCells(table);
             /* write table at specified coordinates */
@@ -287,6 +310,14 @@ namespace RdwTechdayRegistration.Utility
 
             foreach (ApplicationUser user in users)
             {
+                if (rowCount > 4)
+                {
+                    // end of page reached, add new page, reset counters and draw grid for cutting the paper */
+                    AddPageMarkers();
+                    _document.NewPage();
+                    rowCount = 0;
+                }
+
                 AddCard(XMargin + colCount * CardWidth, YMargin + rowCount * CardHeight, user);
 
                 colCount++; // alternate over columns
@@ -294,13 +325,6 @@ namespace RdwTechdayRegistration.Utility
                 {
                     rowCount++; /* add a row when starting at column 0 */
                     colCount = 0;
-                }
-                if (rowCount > 4)
-                {
-                    // end of page reached, add new page, reset counters and draw grid for cutting the paper */
-                    AddPageMarkers();
-                    _document.NewPage();
-                    rowCount = 0;
                 }
             }
             AddPageMarkers();
@@ -314,6 +338,13 @@ namespace RdwTechdayRegistration.Utility
 
             foreach (BadgeContentModel badge in badges)
             {
+                if (rowCount > 4)
+                {
+                    // end of page reached, add new page, reset counters and draw grid for cutting the paper */
+                    AddPageMarkers();
+                    _document.NewPage();
+                    rowCount = 0;
+                }
                 AddCard(XMargin + colCount * CardWidth, YMargin + rowCount * CardHeight, badge);
 
                 colCount++; // alternate over columns
@@ -321,13 +352,6 @@ namespace RdwTechdayRegistration.Utility
                 {
                     rowCount++; /* add a row when starting at column 0 */
                     colCount = 0;
-                }
-                if (rowCount > 4)
-                {
-                    // end of page reached, add new page, reset counters and draw grid for cutting the paper */
-                    AddPageMarkers();
-                    _document.NewPage();
-                    rowCount = 0;
                 }
             }
             AddPageMarkers();

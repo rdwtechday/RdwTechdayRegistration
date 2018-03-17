@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using RdwTechdayRegistration.Utility;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace RdwTechdayRegistration.Controllers
 
@@ -46,6 +47,51 @@ namespace RdwTechdayRegistration.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
+        public IActionResult EnterBadges()
+        {
+            List<BadgeContentModel> badges = new List<BadgeContentModel>();
+            for (int i = 0; i < 10; i++ )
+            {
+                badges.Add(new BadgeContentModel() { PersonType = BadgePersonType.speaker });
+            }
+
+
+            return View(badges);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult EnterBadges(List<BadgeContentModel> badges)
+        {
+            return BadgesResult(badges);    
+        }
+
+        private BadgeGenerator GetBadgeGenerator(Stream stream)
+        {
+            string imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images/badge_banner.jpg");
+            return new BadgeGenerator(stream, imagePath);
+        }
+        private FileStreamResult BadgesResult(List<ApplicationUser> users)
+        {
+            Stream stream = new MemoryStream();
+            BadgeGenerator bg = GetBadgeGenerator(stream);
+            bg.FillPages(users);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "badges.pdf");
+        }
+
+        private FileStreamResult BadgesResult(List<BadgeContentModel> badges)
+        {
+            Stream stream = new MemoryStream();
+            BadgeGenerator bg = GetBadgeGenerator(stream);
+            bg.FillPages(badges);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "badges.pdf");
+        }
+
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Badges()
         {
             List<ApplicationUser> users = await _context.ApplicationUsers
@@ -62,13 +108,7 @@ namespace RdwTechdayRegistration.Controllers
             {
                 user.isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
             }
-
-            string imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images/badge_banner.jpg");
-            Stream stream = new MemoryStream();
-            BadgeGenerator bg = new BadgeGenerator(stream, imagePath);
-            bg.FillPages(users);
-            stream.Seek(0, SeekOrigin.Begin);
-            return File(stream, "application/pdf", "badges.pdf");
+            return BadgesResult(users);
         }
 
         [HttpGet]
@@ -85,15 +125,8 @@ namespace RdwTechdayRegistration.Controllers
                 .SingleOrDefaultAsync(m => m.Id == id);
 
             user.isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
-
-            string imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "images/badge_banner.jpg");
-            Stream stream = new MemoryStream();
-            BadgeGenerator bg = new BadgeGenerator(stream, imagePath);
-            bg.FillPages(new List<ApplicationUser> { user } );
-            stream.Seek(0, SeekOrigin.Begin);
-            return File(stream, "application/pdf", "badges.pdf");
+            return BadgesResult(new List<ApplicationUser> { user });
         }
-
 
         [HttpGet]
         [Authorize(Roles = "Admin")]

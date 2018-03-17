@@ -8,6 +8,7 @@
 
 <p>
     <a asp-action="Badges" class="btn btn-rdw">Download Badges</a>
+    <a asp-action="EnterBadges" class="btn btn-rdw">Badges invoeren</a>
 </p>
 
 <table class="table">
@@ -61,7 +62,8 @@
                 <td>
                     @if (item.UserName != User.Identity.Name)
                     {
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> <text>|</text>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> 
+                        <text>|</text>
                         @if (item.isAdmin)
                         {
                             <a asp-action="RevokeAdminRole" asp-route-id="@item.Id">Intrekken Administrator</a>
@@ -75,7 +77,7 @@
                     {
                         <span>Dit bent u zelf</span>
                     }
-                        <text>|</text> <a asp-action="Badge" asp-route-id="@item.Id">Badge</a>
+                    <text>|</text> <a asp-action="Badge" asp-route-id="@item.Id">Badge</a>
                 </td>
             </tr>
         }
