@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 
 namespace RdwTechdayRegistration.Controllers
 {
-    [Authorize]
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
@@ -43,7 +42,6 @@ namespace RdwTechdayRegistration.Controllers
         public string ErrorMessage { get; set; }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
             // Clear the existing external cookie to ensure a clean login process
@@ -54,7 +52,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
@@ -99,7 +96,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> LoginWith2fa(bool rememberMe, string returnUrl = null)
         {
             // Ensure the user has gone through the username & password screen first
@@ -117,7 +113,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginWith2fa(LoginWith2faViewModel model, bool rememberMe, string returnUrl = null)
         {
@@ -155,7 +150,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> LoginWithRecoveryCode(string returnUrl = null)
         {
             // Ensure the user has gone through the username & password screen first
@@ -171,7 +165,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginWithRecoveryCode(LoginWithRecoveryCodeViewModel model, string returnUrl = null)
         {
@@ -209,7 +202,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Lockout()
         {
             return View();
@@ -271,14 +263,12 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult RegisterNonRdwConfirmation()
         {
             return View();
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> RegisterNonRdwCallback(string code = null)
         {
             if (code == null)
@@ -298,7 +288,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterNonRdwCallback(ResetPasswordViewModel model)
         {
@@ -329,29 +318,29 @@ namespace RdwTechdayRegistration.Controllers
         private void PopulateDivisiesDropDownList(object selectedDivisie = null)
         {
 
-            List<string> divisies = new List<string> { "D&S", "ICT", "R&I", "T&B", "VRT"};
+            List<string> divisies = new List<string> { "D&S", "ICT", "R&I", "T&B", "VRT" };
             ViewBag.Divisies = new SelectList(divisies, selectedDivisie);
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Policy = "SiteNotLocked")]
         public async Task<IActionResult> Register(string returnUrl = null)
         {
-            bool isFull = await ApplicationUser.HasReachedMaxRdw(_context);
-            if ( !isFull )
+            bool isFull = await ApplicationUser.HasReachedMaxRdwOrSiteLocked(_context);
+            if (!isFull)
             {
                 ViewData["ReturnUrl"] = returnUrl;
                 PopulateDivisiesDropDownList();
                 return View();
             } else
             {
-                TempData["StatusMessage"] = "Fout: Het maximum aantal inschrijvingen is bereikt";
+                TempData["StatusMessage"] = "Fout: Het maximum aantal inschrijvingen is bereikt of er kunnen geen inschrijvingen meer bij";
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Policy = "SiteNotLocked")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
@@ -362,7 +351,7 @@ namespace RdwTechdayRegistration.Controllers
             }
             if (ModelState.IsValid)
             {
-                bool isFull = await ApplicationUser.HasReachedMaxRdw(_context);
+                bool isFull = await ApplicationUser.HasReachedMaxRdwOrSiteLocked(_context);
                 if (!isFull)
                 {
                     var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, Organisation = "RDW", Department = model.Department };
@@ -386,7 +375,7 @@ namespace RdwTechdayRegistration.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Het maximum aantal inschrijvingen is bereikt");
+                    ModelState.AddModelError("", "Het maximum aantal inschrijvingen is bereikt of inschrijven niet meer mogelijk");
                 }
             }
             PopulateDivisiesDropDownList(model.Department);
@@ -395,13 +384,13 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult RegisterConfirmation()
         {
             return View();
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -410,14 +399,12 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult SignedOut()
         {
             return View();
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
         {
@@ -428,7 +415,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
         {
             if (remoteError != null)
@@ -464,7 +450,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginViewModel model, string returnUrl = null)
         {
@@ -496,13 +481,12 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
-            bool isFull = await ApplicationUser.HasReachedMaxRdw(_context);
+            bool isFull = await ApplicationUser.HasReachedMaxRdwOrSiteLocked(_context);
             if (isFull)
             {
-                TempData["StatusMessage"] = "Fout: Het maximum aantal inschrijvingen is bereikt";
+                TempData["StatusMessage"] = "Fout: Het maximum aantal inschrijvingen is bereikt of inschrijven is niet meer mogelijk";
             }
             if (userId == null || code == null || isFull )
             {
@@ -518,14 +502,12 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
             return View();
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
@@ -553,14 +535,12 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult ForgotPasswordConfirmation()
         {
             return View();
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(string code = null)
         {
             if (code == null)
@@ -581,7 +561,6 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
@@ -609,15 +588,7 @@ namespace RdwTechdayRegistration.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult ResetPasswordConfirmation()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult AddAdminRole()
         {
             return View();
         }

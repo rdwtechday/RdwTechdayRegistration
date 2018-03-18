@@ -44,11 +44,14 @@
                         <p>@atv.Sessie.Naam</p>
                     }
                 </div>
-                <div class="col-md-2">
-                    <a asp-action="EditSessionSelection" asp-route-tijdvakid="@atv.Tijdvak.Id" asp-route-sessieid="@(atv.Sessie == null ? -1 : atv.Sessie.Id)" class="btn btn-rdw">
-                        @(atv.Sessie == null ? "Sessie Selecteren" : "Sessie aanpassen")
-                    </a>
-                </div>
+                @if (!ViewBag.isSiteLocked)
+                {
+                    <div class="col-md-2">
+                        <a asp-action="EditSessionSelection" asp-route-tijdvakid="@atv.Tijdvak.Id" asp-route-sessieid="@(atv.Sessie == null ? -1 : atv.Sessie.Id)" class="btn btn-rdw">
+                            @(atv.Sessie == null ? "Sessie Selecteren" : "Sessie aanpassen")
+                        </a>
+                    </div>
+                }
             </div>
         </div>
     </div>

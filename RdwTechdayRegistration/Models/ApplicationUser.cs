@@ -91,20 +91,20 @@ namespace RdwTechdayRegistration.Models
             return (int)userCount;
         }
 
-        public async static Task<bool> HasReachedMaxRdw(ApplicationDbContext context)
+        public async static Task<bool> HasReachedMaxRdwOrSiteLocked(ApplicationDbContext context)
         {
             Maxima maxima = await context.Maxima.FirstOrDefaultAsync();
             int count = await ConfirmedRdwUserCountAsync(context);
 
-            return (count >= maxima.MaxRDW);
+            return (count >= maxima.MaxRDW || maxima.SiteHasBeenLocked );
         }
 
-        public async static Task<bool> HasReachedMaxNonRdw(ApplicationDbContext context)
+        public async static Task<bool> HasReachedMaxNonRdwOrSiteLocked(ApplicationDbContext context)
         {
             Maxima maxima = await context.Maxima.FirstOrDefaultAsync();
             int count = await ConfirmedNonRdwUserCountAsync(context);
 
-            return (count >= maxima.MaxNonRDW);
+            return (count >= maxima.MaxNonRDW || maxima.SiteHasBeenLocked);
         }
 
     }

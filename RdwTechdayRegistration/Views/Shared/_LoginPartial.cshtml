@@ -22,7 +22,7 @@ else
     <ul class="nav navbar-nav navbar-right">
 
         @{
-            bool isFull = await ApplicationUser.HasReachedMaxRdw(dbcontext);
+            bool isFull = await ApplicationUser.HasReachedMaxRdwOrSiteLocked(dbcontext);
             if (isFull)
             {
                 <li><a>Registratie gesloten</a></li>

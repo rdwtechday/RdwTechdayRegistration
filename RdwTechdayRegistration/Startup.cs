@@ -11,6 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using RdwTechdayRegistration.Data;
 using RdwTechdayRegistration.Models;
 using RdwTechdayRegistration.Services;
+using RdwTechdayRegistration.Policies;
+using Microsoft.AspNetCore.Authorization;
+using RdwTechdayRegistration.Utility;
+using Microsoft.AspNetCore.Http;
 
 namespace RdwTechdayRegistration
 {
@@ -33,11 +37,22 @@ namespace RdwTechdayRegistration
                 .AddEntityFrameworkStores<RdwTechdayRegistration.Data.ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("SiteNotLocked", policy =>
+                    policy.Requirements.Add(new SiteNotLockedRequirement() ));
+            });
+
+            services.AddSingleton<IAuthorizationHandler, SiteNotLockedHandler>();
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
             // Add Database Initializer
             services.AddScoped<IDbInitializer, DbInitializer>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IProvider<ApplicationDbContext>, Provider<ApplicationDbContext>>();
 
             services.AddMvc();
         }

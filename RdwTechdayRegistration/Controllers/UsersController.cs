@@ -282,18 +282,22 @@ namespace RdwTechdayRegistration.Controllers
                      .ThenInclude(t => t.Tijdvak)
                 .SingleOrDefaultAsync(m => m.Id == id);
 
-            SelectSessies model = new SelectSessies();
-            model.ApplicationUserTijdvakken = user.ApplicationUserTijdvakken.OrderBy(atv => atv.Tijdvak.Order).ToList();
-
             if (user == null)
             {
                 return NotFound();
             }
 
+            SelectSessies model = new SelectSessies();
+            model.ApplicationUserTijdvakken = user.ApplicationUserTijdvakken.OrderBy(atv => atv.Tijdvak.Order).ToList();
+
+            Maxima maxima = await _context.Maxima.FirstOrDefaultAsync();
+            ViewBag.isSiteLocked =  maxima.SiteHasBeenLocked;
+
             return View(model);
         }
 
         [HttpGet]
+        [Authorize(Policy = "SiteNotLocked")]
         public async Task<IActionResult> EditSessionSelection(int? tijdvakid, int? sessieid)
         {
             string id = _userManager.GetUserId(User);
@@ -371,6 +375,7 @@ namespace RdwTechdayRegistration.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "SiteNotLocked")]
         public async Task<IActionResult> LeaveSession(EditSessionSelection model)
         {
             string id = _userManager.GetUserId(User);
@@ -415,6 +420,7 @@ namespace RdwTechdayRegistration.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "SiteNotLocked")]
         public async Task<IActionResult> EditSessionSelection(EditSessionSelection model)
         {
             string id = _userManager.GetUserId(User);
