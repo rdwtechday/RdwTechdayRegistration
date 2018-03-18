@@ -21,12 +21,30 @@ namespace RdwTechdayRegistration.Controllers
         private readonly RdwTechdayRegistration.Data.ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UsersController(RdwTechdayRegistration.Data.ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment)
+        public UsersController(RdwTechdayRegistration.Data.ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
             _hostingEnvironment = hostingEnvironment;
+        }
+
+        private async Task FillIsAdmin(List<ApplicationUser> users)
+        {
+
+            HashSet<string> adminUsershash = new HashSet<string>();
+
+            IList<ApplicationUser> adminusers = await _userManager.GetUsersInRoleAsync("Admin");
+            foreach (ApplicationUser user in adminusers)
+            {
+                adminUsershash.Add(user.Id);
+            }
+            foreach (ApplicationUser user in users)
+            {
+                user.isAdmin = adminUsershash.Contains(user.Id);
+            }
         }
 
         // GET: Deelnemers
@@ -37,11 +55,7 @@ namespace RdwTechdayRegistration.Controllers
             List<ApplicationUser> users = await _context.ApplicationUsers
                 .OrderBy(u => u.Name)
                 .ToListAsync();
-            // brute force, maybe refactor if too slow
-            foreach (ApplicationUser user in users)
-            {
-                user.isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
-            }
+            await FillIsAdmin(users);
             return View(users);
         }
 
@@ -103,11 +117,8 @@ namespace RdwTechdayRegistration.Controllers
                 .Include(i => i.ApplicationUserTijdvakken)
                     .ThenInclude(i => i.Tijdvak)
                 .ToListAsync();
-            // brute force, maybe refactor if too slow
-            foreach (ApplicationUser user in users)
-            {
-                user.isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
-            }
+
+            await FillIsAdmin(users);
             return BadgesResult(users);
         }
 
