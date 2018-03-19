@@ -1,7 +1,8 @@
 ﻿@model List<RdwTechdayRegistration.Utility.BadgeContentModel>
 
 @{
-    ViewData["Title"] = "Badges opvoeren";
+    ViewData["Title"] = "Badges invoeren";
+    ViewData["Message"] = "Je kan tot "+ @Model.Count + " badges tegelijk invoeren";
 }
 
 <div class="row">

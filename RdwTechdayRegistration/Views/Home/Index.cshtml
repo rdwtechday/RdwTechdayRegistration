@@ -18,34 +18,51 @@
 }
 
 
-@if (!SignInManager.IsSignedIn(User))
+@if (ViewBag.SiteHasBeenLocked)
 {
     <div class="jumbotron">
-        <h2>Welkom op de registratiesite voor de RDW Techday!</h2>
-        <p>Op deze site kunt u zich registreren voor het RDW Techday event.</p>
+        <h2>De registratie is gesloten!</h2>
         <p>
-            Medewerkers van RDW kunnen zich direct <a asp-area="" asp-controller="Account" asp-action="Register">inschrijven</a>. 
-            Na inschrijving en het bevestigen van de e-mail kan je <a asp-area="" asp-controller="Account" asp-action="Login">inloggen</a> om sessies te kiezen waaraan je deel wil nemen.
-            Wacht niet te lang, zodat je zeker weet dat je kunt deelnemen aan de sessies van je keuze.
+            Indien je al geregistreerd bent, kan je wel je sessiekeuzes inzien. Het muteren van je sessies kan niet meer.
         </p>
         <p>
-            Werk je niet bij RDW maar ben je wel lid van Samenwerking Noord? Dan kun je je aanmelden voor het event via <a href="http://samenwerkingnoord.nl">Samenwerking Noord</a>.
-            Wij sturen een e-mail met een inschrijflink zodra Samenwerking Noord je naam aan ons heeft doorgegeven.
+            Mocht je verhinderd zijn, geef dit dan door aan de <a href="mailto:rdwtechday@rdw.nl">RDW Techday Organisatie</a>. Tijdens het congres kunnen we dan iemand anders blij maken met met jouw plekje in een sessie.
         </p>
 
-        <br /><p>Meer informatie nodig over het event? Ga dan naar de <a href="http://rdwtechday.nl" target="_blank">site</a> van het event.</p>
+        <br />
+        <p>Meer informatie nodig over het event? Ga dan naar de <a href="http://rdwtechday.nl" target="_blank">site</a> van het event.</p>
     </div>
 }
 else
 {
-    <div class="jumbotron">
-        <h2> Welkom @UserManager.GetUserAsync(User).Result.Name!</h2>
-        <p>
-            Wilt u deelnemen aan sessies, dan is het belangrijk dat u zich voor die sessies <a asp-area="" asp-controller="Users" asp-action="SelectSessies">inschrijft</a>.
-            Om overbezetting te voorkomen controleren wij de toegang tot de zalen.  Gok dus niet op een plekje, meld u aan voor de sessies!
-        </p>
-        <p>Uw naam en organisatie worden vermeld op de congres-badge, mocht u uw gegevens willen aanpassen, dan kan dat <a asp-area="" asp-controller="Manage" asp-action="Index">hier</a></p>
-    </div>
+    @if (!SignInManager.IsSignedIn(User))
+    {
+        <div class="jumbotron">
+            <h2>Welkom op de registratiesite voor de RDW Techday!</h2>
+            <p>Op deze site kunt u zich registreren voor het RDW Techday event.</p>
+            <p>
+                Medewerkers van RDW kunnen zich direct <a asp-area="" asp-controller="Account" asp-action="Register">inschrijven</a>.
+                Na inschrijving en het bevestigen van de e-mail kan je <a asp-area="" asp-controller="Account" asp-action="Login">inloggen</a> om sessies te kiezen waaraan je deel wil nemen.
+                Wacht niet te lang, zodat je zeker weet dat je kunt deelnemen aan de sessies van je keuze.
+            </p>
+            <p>
+                Werk je niet bij RDW maar ben je wel lid van Samenwerking Noord? Dan kun je je aanmelden voor het event via <a href="http://samenwerkingnoord.nl">Samenwerking Noord</a>.
+                Wij sturen een e-mail met een inschrijflink zodra Samenwerking Noord je naam aan ons heeft doorgegeven.
+            </p>
 
+            <br /><p>Meer informatie nodig over het event? Ga dan naar de <a href="http://rdwtechday.nl" target="_blank">site</a> van het event.</p>
+        </div>
+    }
+    else
+    {
+        <div class="jumbotron">
+            <h2> Welkom @UserManager.GetUserAsync(User).Result.Name!</h2>
+            <p>
+                Wilt u deelnemen aan sessies, dan is het belangrijk dat u zich voor die sessies <a asp-area="" asp-controller="Users" asp-action="SelectSessies">inschrijft</a>.
+                Om overbezetting te voorkomen controleren wij de toegang tot de zalen.  Gok dus niet op een plekje, meld u aan voor de sessies!
+            </p>
+            <p>Uw naam en organisatie worden vermeld op de congres-badge, mocht u uw gegevens willen aanpassen, dan kan dat <a asp-area="" asp-controller="Manage" asp-action="Index">hier</a></p>
+        </div>
+
+    }
 }
-

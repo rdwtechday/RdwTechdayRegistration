@@ -8,19 +8,19 @@
 <div>
     <div class="form-group">
         <label asp-for="Naam" class="control-label"></label>
-        <input asp-for="Naam" class="form-control" disabled />
+        <input asp-for="Naam" class="form-control" readonly />
     </div>
     <div class="form-group">
         <label asp-for="Track.Naam" class="control-label"></label>
-        <input asp-for="Track.Naam" class="form-control" disabled />
+        <input asp-for="Track.Naam" class="form-control" readonly />
     </div>
     <div class="form-group">
         <label asp-for="Ruimte.Naam" class="control-label"></label>
-        <input asp-for="Ruimte.Naam" class="form-control" disabled />
+        <input asp-for="Ruimte.Naam" class="form-control" readonly />
     </div>
     <div class="form-group">
         <label class="control-label">Tijd</label>
-        <input value="@Model.TimeRange()" class="form-control" disabled />
+        <input value="@Model.TimeRange()" class="form-control" readonly />
     </div>
 </div>
 <div>

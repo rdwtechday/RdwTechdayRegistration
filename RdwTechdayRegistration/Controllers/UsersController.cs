@@ -53,6 +53,7 @@ namespace RdwTechdayRegistration.Controllers
         public async Task<IActionResult> Index()
         {
             List<ApplicationUser> users = await _context.ApplicationUsers
+                .Include(i => i.ApplicationUserTijdvakken)
                 .OrderBy(u => u.Name)
                 .ToListAsync();
             await FillIsAdmin(users);
@@ -68,8 +69,6 @@ namespace RdwTechdayRegistration.Controllers
             {
                 badges.Add(new BadgeContentModel() { PersonType = BadgePersonType.speaker });
             }
-
-
             return View(badges);
         }
 

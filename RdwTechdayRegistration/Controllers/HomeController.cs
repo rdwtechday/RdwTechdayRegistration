@@ -19,8 +19,11 @@ namespace RdwTechdayRegistration.Controllers
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            Maxima maxima = await _context.Maxima.FirstOrDefaultAsync();
+            ViewBag.SiteHasBeenLocked = maxima.SiteHasBeenLocked;
+
             return View();
         }
 
