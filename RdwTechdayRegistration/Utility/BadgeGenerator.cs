@@ -39,7 +39,7 @@ namespace RdwTechdayRegistration.Utility
 
             _fontOrganizerName = new Font(_baseFont, 24.0f, Font.BOLD, new BaseColor(112, 48, 160));
             _fontSpeakerName = new Font(_baseFont, 24.0f, Font.BOLD, new BaseColor(0, 176, 240));
-            _fontUserName = new Font(_baseFont, 24.0f, Font.BOLD, new BaseColor(0, 0, 0));
+            _fontUserName = new Font(_baseFont, 24.0f, Font.BOLD, new BaseColor(236, 82, 0));
             _fontSession = new Font(_baseFont, 16.0f, Font.NORMAL);
             _fontOrganization = new Font(_baseFont, 16.0f, Font.ITALIC);
             _fontBannerOrange = new Font(_baseFont, 32.0f, Font.NORMAL, new BaseColor(236, 82, 0));
