@@ -30,6 +30,7 @@
         </form>
     </div>
 </div>
+<hr/>
 <div class="row">
     <div class="col-md-4">
         <div class="panel panel-default">
@@ -90,13 +91,16 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
-        <h3>De @(Model.LastCreatedUsers.Count()) laatst aangemaakte gebruikers</h3>
-        @await Html.PartialAsync("_UserListPartial", Model.LastCreatedUsers)
+@if (Model.LastCreatedUsers.Count() > 0)
+{
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Laatst aangemaakte gebruikers</h3>
+            @await Html.PartialAsync("_UserListPartial", Model.LastCreatedUsers)
+        </div>
     </div>
-</div>
-
-    @section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    }
+}
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -48,7 +48,8 @@ namespace RdwTechdayRegistration.Controllers
 
             List<ApplicationUser> users = await _context.ApplicationUsers
                 .Include(t => t.ApplicationUserTijdvakken)
-                .Where(t => t.DateCreated != null)
+                /* this is to filter older users that did not have a datecreated field as they where created before adding the field */
+                .Where(t => t.DateCreated > new System.DateTime(2017, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc))
                 .OrderByDescending(t => t.DateCreated)
                 .Take(20)
                 .ToListAsync();
