@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RdwTechdayRegistration.Data;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,7 +16,10 @@ namespace RdwTechdayRegistration.Models
         public ApplicationUser()
         {
             ApplicationUserTijdvakken = new List<ApplicationUserTijdvak>();
+            DateCreated = DateTime.UtcNow;
         }
+
+        public DateTime DateCreated { get; set; }
 
         [Required]
         [Display(Name = "Naam")]

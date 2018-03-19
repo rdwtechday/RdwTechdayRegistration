@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace RdwTechdayRegistration.Models
         public Maxima()
         {
             ForceChangeCount = 0;
+            LastCreatedUsers = new List<ApplicationUser>();
         }
         public int Id { get; set; }
         [Display(Name = "Maximum aantal RDW'ers")]
@@ -21,13 +23,15 @@ namespace RdwTechdayRegistration.Models
         [Display(Name = "Mutaties blokkeren")]
         public bool SiteHasBeenLocked { get; set; }
 
-
         // this field is used to create a dummy change so this record is forcibly saved
         // to trigger a concurrency check in register session
         public int ForceChangeCount { get; set; }
 
         [Timestamp]
         public byte[] RowVersion { get; set; }
+
+        [NotMapped]
+        public List<ApplicationUser> LastCreatedUsers;
 
     }
 }

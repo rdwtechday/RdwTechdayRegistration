@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using RdwTechdayRegistration.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -44,6 +45,15 @@ namespace RdwTechdayRegistration.Controllers
             ViewBag.ConfirmedNonRdwUserCount = confirmedNonRdwUserCount.ToString();
             ViewBag.UnconfirmedRdwUserCount = rdwUserCount - confirmedRdwUserCount;
             ViewBag.UnconfirmedNonRdwUserCount = nonRdwUserCount - confirmedNonRdwUserCount;
+
+            List<ApplicationUser> users = await _context.ApplicationUsers
+                .Include(t => t.ApplicationUserTijdvakken)
+                .Where(t => t.DateCreated != null)
+                .OrderByDescending(t => t.DateCreated)
+                .Take(20)
+                .ToListAsync();
+
+            maxima.LastCreatedUsers = users;
 
             return View(maxima);
         }

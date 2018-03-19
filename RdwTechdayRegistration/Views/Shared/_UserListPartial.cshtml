@@ -1,0 +1,69 @@
+﻿@model IEnumerable<RdwTechdayRegistration.Models.ApplicationUser>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Organisation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Department)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>Bevestigd</th>
+            <th>Sessies</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                <a asp-controller="Users" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Organisation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Department)
+            </td>
+
+            <td>
+                <a href="mailto:@Html.DisplayTextFor(modelItem => item.Email)" target="_top"><span class='fa fa-envelope'>&nbsp;</span>@Html.DisplayTextFor(modelItem => item.Email)</a>
+            </td>
+            <td>
+                @(item.EmailConfirmed ? "Ja" : "Nee")
+            </td>
+            <td>
+                @(item.ApplicationUserTijdvakken.Where(t => t.SessieId != null).Count())
+            </td>
+            <td>
+                @if (item.UserName != User.Identity.Name)
+                {
+                    <a asp-controller="Users" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <text>|</text>
+                    @if (item.isAdmin)
+                    {
+                        <a asp-controller="Users" asp-action="RevokeAdminRole" asp-route-id="@item.Id">Intrekken Administrator</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Users" asp-action="AddAdminRole" asp-route-id="@item.Id">Maak Administrator</a>
+                    }
+                }
+                else
+                {
+                    <span>Dit bent u zelf</span>
+                }
+                <text>|</text> <a asp-controller="Users" asp-action="Badge" asp-route-id="@item.Id">Badge</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

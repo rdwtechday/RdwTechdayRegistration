@@ -90,6 +90,13 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-12">
+        <h3>De @(Model.LastCreatedUsers.Count()) laatst aangemaakte gebruikers</h3>
+        @await Html.PartialAsync("_UserListPartial", Model.LastCreatedUsers)
+    </div>
+</div>
+
     @section Scripts {
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     }
