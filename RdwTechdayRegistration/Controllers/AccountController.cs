@@ -524,7 +524,7 @@ namespace RdwTechdayRegistration.Controllers
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
-                string plainMessage = $"Please reset your password by clicking here: {callbackUrl}'";
+                string plainMessage = $"Please reset your password by clicking here: {callbackUrl}";
                 string htmlMessage = $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>";
                 await _emailSender.SendEmailAsync(model.Email, "Reset Password", plainMessage, htmlMessage);
                 return RedirectToAction(nameof(ForgotPasswordConfirmation));
@@ -582,6 +582,7 @@ namespace RdwTechdayRegistration.Controllers
                     var signingresult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: true);
                     return RedirectToAction(nameof(ResetPasswordConfirmation));
                 }
+                AddErrors(result);
             }
             ModelState.AddModelError("Email", "Er zit een fout in de door u verstrekte gegevens. Is het e-mail adres dezelfde als waar u de u de link op ontvangen hebt?");
             return View();
