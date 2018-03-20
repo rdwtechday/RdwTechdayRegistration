@@ -44,11 +44,17 @@ namespace RdwTechdayRegistration.Controllers
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
-            // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            if (_signInManager.IsSignedIn(User)) {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+            else
+            {
+                // Clear the existing external cookie to ensure a clean login process
+                await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
+                ViewData["ReturnUrl"] = returnUrl;
+                return View();
+            }
         }
 
         [HttpPost]
