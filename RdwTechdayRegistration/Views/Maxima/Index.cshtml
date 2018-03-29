@@ -100,13 +100,13 @@
         </div>
     </div>
 }
-@if (Model.LastCreatedUsers.Where(t => t.EmailConfirmed == false).Count() > 0)
+@if (Model.UnverifiedUsers.Count() > 0)
 {
     <hr />
     <div class="row">
         <div class="col-md-12">
             <h3>Ongeverifieerde gebruikers</h3>
-            @await Html.PartialAsync("_UserListPartial", Model.LastCreatedUsers.Where(t => t.EmailConfirmed == false).ToList())
+            @await Html.PartialAsync("_UserListPartial", Model.UnverifiedUsers)
         </div>
     </div>
 }

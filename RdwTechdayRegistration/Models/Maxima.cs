@@ -13,6 +13,7 @@ namespace RdwTechdayRegistration.Models
         {
             ForceChangeCount = 0;
             LastCreatedUsers = new List<ApplicationUser>();
+            UnverifiedUsers = new List<ApplicationUser>();
         }
         public int Id { get; set; }
         [Display(Name = "Maximum aantal RDW'ers")]
@@ -32,6 +33,7 @@ namespace RdwTechdayRegistration.Models
 
         [NotMapped]
         public List<ApplicationUser> LastCreatedUsers;
-
+        [NotMapped]
+        public List<ApplicationUser> UnverifiedUsers;
     }
 }

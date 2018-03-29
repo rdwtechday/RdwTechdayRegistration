@@ -54,7 +54,14 @@ namespace RdwTechdayRegistration.Controllers
                 .Take(20)
                 .ToListAsync();
 
+            List<ApplicationUser> unverifiedUsers = await _context.ApplicationUsers
+                .Include(t => t.ApplicationUserTijdvakken)
+                .Where(t => t.EmailConfirmed == false)
+                .OrderByDescending(t => t.DateCreated)
+                .ToListAsync();
+
             maxima.LastCreatedUsers = users;
+            maxima.UnverifiedUsers = unverifiedUsers;
 
             return View(maxima);
         }
