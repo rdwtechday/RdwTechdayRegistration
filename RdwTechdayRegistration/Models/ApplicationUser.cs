@@ -19,7 +19,7 @@ namespace RdwTechdayRegistration.Models
             DateCreated = DateTime.UtcNow;
         }
 
-        [Display(Name = "Aangemaakt")]
+        [Display(Name = "Datum")]
         [DisplayFormat(DataFormatString = "{0:dd-MMM}")]
         public DateTime DateCreated { get; set; }
 
