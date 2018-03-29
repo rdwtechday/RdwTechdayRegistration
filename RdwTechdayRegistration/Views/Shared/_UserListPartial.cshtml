@@ -17,6 +17,9 @@
             </th>
             <th>Bevestigd</th>
             <th>Sessies</th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -42,6 +45,9 @@
             </td>
             <td>
                 @(item.ApplicationUserTijdvakken.Where(t => t.SessieId != null).Count())
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreated)
             </td>
             <td>
                 @if (item.UserName != User.Identity.Name)
