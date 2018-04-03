@@ -37,6 +37,7 @@ namespace RdwTechdayRegistration
                 .AddEntityFrameworkStores<RdwTechdayRegistration.Data.ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = new System.TimeSpan(5,0,0,0));
 
             services.AddAuthorization(options =>
             {

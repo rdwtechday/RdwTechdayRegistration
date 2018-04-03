@@ -199,7 +199,7 @@ namespace RdwTechdayRegistration.Utility
 
             if (applicationUserTijdvak.Sessie == null || applicationUserTijdvak.Sessie.Track.BadgeCode == null)
             {
-                cell = new PdfPCell(new Phrase(String.Format("X")));
+                cell = new PdfPCell(new Phrase(String.Format("")));
                 cell.BackgroundColor = new BaseColor(255, 255, 255);
             }
             else

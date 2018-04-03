@@ -126,7 +126,6 @@ namespace RdwTechdayRegistration.Controllers
         public async Task<IActionResult> Badge(string id)
         {
             var user = await _context.ApplicationUsers
-                .Where(u => u.EmailConfirmed)
                 .Include(i => i.ApplicationUserTijdvakken)
                     .ThenInclude(i => i.Sessie)
                         .ThenInclude(i => i.Track)
