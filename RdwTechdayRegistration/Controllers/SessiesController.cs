@@ -2,9 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using RdwTechdayRegistration.Models;
 using RdwTechdayRegistration.Models.SessieViewModels;
+using RdwTechdayRegistration.Utility;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -36,7 +40,60 @@ namespace RdwTechdayRegistration.Controllers
             _context = context;
         }
 
-        // GET: Sessies
+        private FileStreamResult ExcelResult(List<Sessie> sessies, Dictionary<int, int> userCounts)
+        {
+            NpoiMemoryStream stream = new NpoiMemoryStream();
+            stream.AllowClose = false;
+            IWorkbook workbook = new XSSFWorkbook();
+            ISheet excelSheet = workbook.CreateSheet("Sessies");
+
+            int iRow = 0;
+            IRow row = excelSheet.CreateRow(iRow);
+            row.CreateCell(0).SetCellValue("Naam");
+            row.CreateCell(1).SetCellValue("Ruimte");
+            row.CreateCell(2).SetCellValue("Track");
+            row.CreateCell(3).SetCellValue("Tijd");
+            row.CreateCell(4).SetCellValue("Deelnemers");
+            row.CreateCell(5).SetCellValue("Capaciteit");
+
+            foreach (Sessie sessie in sessies)
+            {
+                iRow++;
+                row = excelSheet.CreateRow(iRow);
+                row.CreateCell(0).SetCellValue(sessie.Naam);
+                row.CreateCell(1).SetCellValue(sessie.Ruimte.Naam);
+                row.CreateCell(2).SetCellValue(sessie.Track.Naam);
+                row.CreateCell(3).SetCellValue(sessie.TimeRange());
+                int count = 0;
+                if ( userCounts.ContainsKey(sessie.Id) ) {
+                    count = userCounts[sessie.Id];
+                }
+                row.CreateCell(4).SetCellValue(count);
+                row.CreateCell(5).SetCellValue(sessie.Ruimte.Capacity);
+            }
+            workbook.Write(stream);
+            stream.AllowClose = true;
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "sessies.xlsx");
+        }
+
+        public async Task<IActionResult> Excel()
+        {
+            List<Sessie> sessies = await _context.Sessies
+                .AsNoTracking()
+                .Include(c => c.Ruimte)
+                .Include(c => c.SessieTijdvakken)
+                    .ThenInclude(stv => stv.Tijdvak)
+                .Include(c => c.Track)
+                .OrderBy(s => s.Naam)
+                .ToListAsync();
+
+            Dictionary<int, int> UserCounts = await Sessie.GetUserCountsAsync(_context);
+
+
+            return ExcelResult(sessies, UserCounts);
+        }
+
         public async Task<IActionResult> Index()
         {
             List<Sessie> sessies = await _context.Sessies
