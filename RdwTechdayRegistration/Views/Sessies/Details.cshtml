@@ -4,6 +4,9 @@
     ViewData["Title"] = "Sessie";
     ViewData["Message"] = "Inzien";
 }
+<p>
+    <a asp-action="DetailsExcel" asp-route-id="@Model.Id" class="btn btn-rdw">Download Excel</a>
+</p>
 
 <div>
     <div class="form-group">
@@ -38,12 +41,12 @@
             <tbody>
                 @foreach (ApplicationUser user in ViewBag.Attendants)
                 {
-                <tr>
-                    <td><a asp-action="Details" asp-controller="Users" asp-route-id="@user.Id">@Html.DisplayFor(modelItem => user.Name)</a></td>
-                    <td>@user.Organisation</td>
-                    <td>@user.Department</td>
-                    <td><a href="mailto:@Html.DisplayTextFor(modelItem => user.Email)" target="_top"><span class='fa fa-envelope'>&nbsp;</span>@Html.DisplayTextFor(modelItem => user.Email)</a></td>
-                </tr>
+                    <tr>
+                        <td><a asp-action="Details" asp-controller="Users" asp-route-id="@user.Id">@Html.DisplayFor(modelItem => user.Name)</a></td>
+                        <td>@user.Organisation</td>
+                        <td>@user.Department</td>
+                        <td><a href="mailto:@Html.DisplayTextFor(modelItem => user.Email)" target="_top"><span class='fa fa-envelope'>&nbsp;</span>@Html.DisplayTextFor(modelItem => user.Email)</a></td>
+                    </tr>
                 }
             </tbody>
         </table>

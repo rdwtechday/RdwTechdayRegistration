@@ -65,7 +65,8 @@ namespace RdwTechdayRegistration.Controllers
                 row.CreateCell(2).SetCellValue(sessie.Track.Naam);
                 row.CreateCell(3).SetCellValue(sessie.TimeRange());
                 int count = 0;
-                if ( userCounts.ContainsKey(sessie.Id) ) {
+                if (userCounts.ContainsKey(sessie.Id))
+                {
                     count = userCounts[sessie.Id];
                 }
                 row.CreateCell(4).SetCellValue(count);
@@ -77,61 +78,8 @@ namespace RdwTechdayRegistration.Controllers
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "sessies.xlsx");
         }
 
-        public async Task<IActionResult> Excel()
+        private List<ApplicationUser> UsersAtSessie(Sessie sessie)
         {
-            List<Sessie> sessies = await _context.Sessies
-                .AsNoTracking()
-                .Include(c => c.Ruimte)
-                .Include(c => c.SessieTijdvakken)
-                    .ThenInclude(stv => stv.Tijdvak)
-                .Include(c => c.Track)
-                .OrderBy(s => s.Naam)
-                .ToListAsync();
-
-            Dictionary<int, int> UserCounts = await Sessie.GetUserCountsAsync(_context);
-
-
-            return ExcelResult(sessies, UserCounts);
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            List<Sessie> sessies = await _context.Sessies
-                .AsNoTracking()
-                .Include(c => c.Ruimte)
-                .Include(c => c.SessieTijdvakken)
-                    .ThenInclude(stv => stv.Tijdvak)
-                .Include(c => c.Track)
-                .OrderBy(s => s.Naam)
-                .ToListAsync();
-
-            ViewBag.UserCounts = await Sessie.GetUserCountsAsync(_context);
-
-            return View(sessies);
-        }
-
-        // GET: Sessies/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var sessie = await _context.Sessies
-                .Include(c => c.Ruimte)
-                .Include(c => c.SessieTijdvakken)
-                    .ThenInclude(stv => stv.Tijdvak)
-                .Include(c => c.Track)
-                .Include(c => c.ApplicationUserTijdvakken)
-                    .ThenInclude(c => c.ApplicationUser)
-                .SingleOrDefaultAsync(m => m.Id == id);
-
-            if (sessie == null)
-            {
-                return NotFound();
-            }
-
             /* bit brute force, but given low number of users it should be ok */
             var userIDs = new HashSet<string>();
             List<ApplicationUser> users = new List<ApplicationUser>();
@@ -144,7 +92,124 @@ namespace RdwTechdayRegistration.Controllers
                     userIDs.Add(atv.ApplicationUserId);
                 }
             }
-            ViewBag.Attendants = users.OrderBy(c => c.Name).ToList();
+            return users.OrderBy(c => c.Name).ToList();
+        }
+
+        private async Task<List<Sessie>> IndexSessies()
+        {
+            return await _context.Sessies
+                .AsNoTracking()
+                .Include(c => c.Ruimte)
+                .Include(c => c.SessieTijdvakken)
+                    .ThenInclude(stv => stv.Tijdvak)
+                .Include(c => c.Track)
+                .OrderBy(s => s.Naam)
+                .ToListAsync();
+        }
+
+        public async Task<IActionResult> Excel()
+        {
+            List<Sessie> sessies = await IndexSessies();
+            Dictionary<int, int> UserCounts = await Sessie.GetUserCountsAsync(_context);
+
+            return ExcelResult(sessies, UserCounts);
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            List<Sessie> sessies = await IndexSessies();
+            ViewBag.UserCounts = await Sessie.GetUserCountsAsync(_context);
+
+            return View(sessies);
+        }
+
+        private async Task<Sessie> DetailsSessie(int? id)
+        {
+            return await _context.Sessies
+                .Include(c => c.Ruimte)
+                .Include(c => c.SessieTijdvakken)
+                    .ThenInclude(stv => stv.Tijdvak)
+                .Include(c => c.Track)
+                .Include(c => c.ApplicationUserTijdvakken)
+                    .ThenInclude(c => c.ApplicationUser)
+                .SingleOrDefaultAsync(m => m.Id == id);
+        }
+
+        private FileStreamResult DetailsExcelResult(Sessie sessie, List<ApplicationUser> users)
+        {
+            NpoiMemoryStream stream = new NpoiMemoryStream();
+            stream.AllowClose = false;
+            IWorkbook workbook = new XSSFWorkbook();
+            ISheet excelSheet = workbook.CreateSheet("Sessie");
+            IRow row = excelSheet.CreateRow(0);
+            row.CreateCell(0).SetCellValue("Naam");
+            row.CreateCell(1).SetCellValue(sessie.Naam);
+            row = excelSheet.CreateRow(1);
+            row.CreateCell(0).SetCellValue("Track");
+            row.CreateCell(1).SetCellValue(sessie.Track.Naam);
+            row = excelSheet.CreateRow(2);
+            row.CreateCell(0).SetCellValue("Ruimte");
+            row.CreateCell(1).SetCellValue(sessie.Ruimte.Naam);
+            row = excelSheet.CreateRow(3);
+            row.CreateCell(0).SetCellValue("Deelnemers");
+            row.CreateCell(1).SetCellValue(users.Count);
+
+
+            excelSheet = workbook.CreateSheet("Deelnemers");
+
+            int iRow = 0;
+            row = excelSheet.CreateRow(iRow);
+            row.CreateCell(0).SetCellValue("Naam");
+            row.CreateCell(1).SetCellValue("Organisatie");
+            row.CreateCell(2).SetCellValue("Afdeling");
+            row.CreateCell(3).SetCellValue("Email");
+
+            foreach (ApplicationUser user in users)
+            {
+                iRow++;
+                row = excelSheet.CreateRow(iRow);
+                row.CreateCell(0).SetCellValue(user.Name);
+                row.CreateCell(1).SetCellValue(user.Organisation);
+                row.CreateCell(2).SetCellValue(user.Department);
+                row.CreateCell(3).SetCellValue(user.Email);
+            }
+            workbook.Write(stream);
+            stream.AllowClose = true;
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "sessie-" + sessie.Id.ToString().Trim() + ".xlsx");
+        }
+        public async Task<IActionResult> DetailsExcel(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var sessie = await DetailsSessie(id);
+            if (sessie == null)
+            {
+                return NotFound();
+            }
+            List<ApplicationUser> users = UsersAtSessie(sessie);
+            return DetailsExcelResult(sessie, users);
+        }
+
+        // GET: Sessies/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var sessie = await DetailsSessie(id);
+
+            if (sessie == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.Attendants = UsersAtSessie(sessie);
+
             return View(sessie);
         }
 
@@ -162,7 +227,6 @@ namespace RdwTechdayRegistration.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public async Task<IActionResult> Create([Bind("Id,Naam,TrackId,RuimteId")] Sessie sessie, string[] selectedTijdvakken)
         {
             if (ModelState.IsValid)
@@ -218,6 +282,7 @@ namespace RdwTechdayRegistration.Controllers
             }
             ViewData["Tijdvakken"] = viewModel;
         }
+
         private void PopulateSessieTijdvakData(Sessie sessie)
         {
             var tijdvakken = _context.Tijdvakken.OrderBy(t => t.Order);
