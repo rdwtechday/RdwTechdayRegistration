@@ -19,9 +19,9 @@ namespace RdwTechdayRegistration.Models
 
         public int Id { get; set; }
         public string Naam { get; set; }
-        public int? RuimteId { get; set; }
+        public int RuimteId { get; set; }
         public Ruimte Ruimte { get; set; }
-        public int? TrackId { get; set; }
+        public int TrackId { get; set; }
         public Track Track { get; set; }
 
         // this field is used to create a dummy change so this record is forcibly saved
