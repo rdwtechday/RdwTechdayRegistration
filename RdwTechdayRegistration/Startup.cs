@@ -37,6 +37,7 @@ namespace RdwTechdayRegistration
                 .AddEntityFrameworkStores<RdwTechdayRegistration.Data.ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            // set token lifespan to 5 days so people gave some time to respond to an invite
             services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = new System.TimeSpan(5,0,0,0));
 
             services.AddAuthorization(options =>
