@@ -7,3 +7,17 @@ This site is a RDW specific implementation of a congress administration system a
 * Guarding of the total number of attendants as defined by the venue capacity
 * Automated printing of badges for the event organisation, attendants and speakers. The badges of attendants also contain their selected sessions so it is easy to check if they are registered for a session
 * Administration pages to check delegates, attendance to sessions and the overall state of the registrations
+
+## How to setup
+* Clone the project to your Visual Studio 
+* Copy the ```secrets.json.example``` to ```secrets.json``` and fill in the right values for the parameters. 
+* Run, you can log in with the default account you set up in the secrets.json. This is the default admin account. You can use this to add more admins (after they registered) and do all the other stuff necessary.
+
+## The configuration data
+The app has a number of Models that need to be filled before you can release it to the public. The app will initialize the database with a dataset that worked well in the past and fits the default venue that we use.
+The Models in the app are:
+* **Tijdvak** A Tijdvak (Timeslot) defines a Timerange in which (a part of) of a session can be given. Timeslot can be combined in Session (e.g. a workshop that needs wo timeslots). You need to give the list of timeslots the right values in the beginning. Timeslot is used by a lot of other classes.  Changing the timeslot, basically means reentering all your data and reregistering all the attendees. So be warned. 
+* **Ruimte** A Ruimte (space) is a location or room in which a sessie is being given.
+* **Track** A track is a series of sessions that kinda fit togethers (So a track on software, a track on Infrastructure etc) 
+
+
