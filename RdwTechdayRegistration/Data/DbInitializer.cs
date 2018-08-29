@@ -124,14 +124,14 @@ namespace RdwTechdayRegistration.Data
 
             var tracks = new List<Track>();
 
-            var track0 = new Track { Naam = "Keynote", Rgb = "B9CA8A" }; tracks.Add(track0);
-            var track1 = new Track { Naam = "Infra", Rgb = "FFC548" }; tracks.Add(track1);
-            var track2 = new Track { Naam = "Apps", Rgb = "B0A0C5" }; tracks.Add(track2);
-            var track3 = new Track { Naam = "Collaboratie", Rgb = "9CD2E0" }; tracks.Add(track3);
-            var track4 = new Track { Naam = "Inspiratie", Rgb = "FFAC59" }; tracks.Add(track4);
-            var track5 = new Track { Naam = "Workshops I", Rgb = "D99690" }; tracks.Add(track5);
-            var track6 = new Track { Naam = "Workshops II", Rgb = "D99690" }; tracks.Add(track6);
-            var track7 = new Track { Naam = "Closing Note", Rgb = "B9CA8A" }; tracks.Add(track7);
+            var track0 = new Track { Naam = "Keynote", Rgb = "B9CA8A", BadgeCode = "KN" }; tracks.Add(track0);
+            var track1 = new Track { Naam = "Infra", Rgb = "FFC548", BadgeCode= "IF" }; tracks.Add(track1);
+            var track2 = new Track { Naam = "Apps", Rgb = "B0A0C5", BadgeCode = "AP" }; tracks.Add(track2);
+            var track3 = new Track { Naam = "Collaboratie", Rgb = "9CD2E0", BadgeCode = "CO" }; tracks.Add(track3);
+            var track4 = new Track { Naam = "Inspiratie", Rgb = "FFAC59", BadgeCode = "IS" }; tracks.Add(track4);
+            var track5 = new Track { Naam = "Workshops I", Rgb = "D99690", BadgeCode = "W1" }; tracks.Add(track5);
+            var track6 = new Track { Naam = "Workshops II", Rgb = "D99690", BadgeCode = "W2" }; tracks.Add(track6);
+            var track7 = new Track { Naam = "Closing Note", Rgb = "B9CA8A", BadgeCode = "CN" }; tracks.Add(track7);
 
             _context.Tracks.AddRange(tracks);
 

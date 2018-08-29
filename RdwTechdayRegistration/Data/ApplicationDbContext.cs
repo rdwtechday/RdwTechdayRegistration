@@ -72,11 +72,6 @@ namespace RdwTechdayRegistration.Data
                 .WithMany(c => c.SessieTijdvakken)
                 .HasForeignKey(bc => bc.TijdvakId);
 
-            builder.Entity<TrackTijdvak>()
-                .ToTable("TrackTijdvakken");
-
-            builder.Entity<TrackTijdvak>()
-                .HasKey(c => new { c.TrackID, c.TijdvakID });
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }

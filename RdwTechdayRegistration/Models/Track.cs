@@ -19,7 +19,5 @@ namespace RdwTechdayRegistration.Models
         public string BadgeCode { get; set; }
 
         public List<Sessie> Sessies { get; set; }
-        //public List<ApplicationUserTijdvak> ApplicationUserTijdvakken { get; set; }
-        //public List<TrackTijdvak> Tijdvakken { get; set; }
     }
 }
